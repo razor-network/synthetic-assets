@@ -1,6 +1,5 @@
 pragma solidity ^0.5.8;
-// function to liquidate (optional) this
-//collateralization ratio
+// function to liquidate (optional) this	
 import "./SimpleToken.sol";
 import "./Oracle.sol";
 contract CDPFactory {
@@ -51,12 +50,20 @@ contract CDPFactory {
 			address ad = address(_st);
 			contracts[id] = ad;
 		}
+
 		SimpleToken st = SimpleToken(contracts[id]);
+		bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
+		if(cdps[cdpid].id==0x0000000000000000000000000000000000000000000000000000000000000000) {
+			cdps[cdpid] = CDP(cdpid, id, address(st), msg.sender, val, toMint);
+		}
+		else
+		{
+			cdps[cdpid].collateral = cdps[cdpid].collateral + msg.value;
+			cdps[cdpid].debt = cdps[cdpid].debt  + toMint;
+		}
 		// st.addMinter(msg.sender);
 		// require()
 		st.mint(sender, toMint);
-		bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
-		cdps[cdpid] = CDP(cdpid, id, address(st), msg.sender, val, toMint);
 		numCDP = numCDP + 1;
 		emit DebugBytes32(cdpid);
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
@@ -66,7 +73,6 @@ contract CDPFactory {
 
 		function burn(bytes32 id, uint256 amount) public 	
 		{
-
 		bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
 		CDP storage cdp = cdps[cdpid];
 		Oracle oracle = Oracle(oracleAddress);
@@ -88,10 +94,7 @@ contract CDPFactory {
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
 		// how much eth to returnj? token = ethprice/assetprice * eth
 		// eth = token/price
-
-
 	}
-
 
 		function liquidate(bytes32 cdpId) public 	
 		{

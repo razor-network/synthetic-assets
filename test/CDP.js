@@ -40,7 +40,41 @@ contract('CDPFactory', function (accounts) {
 	  console.log('st', Number(await st.balanceOf(accounts[0])))
 	  assert((await st.balanceOf(accounts[0])).cmp(expectedBalance) ===0)
 	  cdpIdCreated = await cdp.cdps(cdpId)
-	  // console.log('cdpIdCreated',cdpIdCreated)
+	  console.log('collateral',Number(cdpIdCreated.collateral))
+	  assert(cdpId === cdpIdCreated.id)
+	  // assert(false)
+    })
+
+ it('should be able to mint again', async function () {
+      // console.log(web3i.eth.accounts)
+
+      let cdp = await CDPFactory.deployed()
+
+      let oracle = await Oracle.deployed()
+      console.log('addre',oracle.address)
+		await cdp.constructory(oracle.address)
+      let url = 'goog.com'
+      let selector = 'loleverything'
+      let id = await web3.utils.soliditySha3({type:"string", value:url},{type:"string",value:selector});
+      console.log('id lol', id)
+      let value = new web3.utils.BN('2')
+      // console.log('value', value)
+      let eth = new web3.utils.BN('1000000000000000000')
+      let expectedBalance = new web3.utils.BN('4000000000000000000')
+      await oracle.request(url, selector)
+      await oracle.fulfil(id, value)
+      await cdp.mint(url, selector,  {value: eth, from: accounts[0]})
+      let cdpId = web3.utils.soliditySha3(accounts[0], id)
+      console.log('cdpId', cdpId)
+     
+	  let address = await cdp.contracts(id)    
+	  console.log('address', address)
+	  assert(address !== '0x0000000000000000000000000000000000000000')
+	  st = await SimpleToken.at(address)
+	  console.log('st', Number(await st.balanceOf(accounts[0])))
+	  assert((await st.balanceOf(accounts[0])).cmp(expectedBalance) ===0)
+	  cdpIdCreated = await cdp.cdps(cdpId)
+	  console.log('collateral',Number(cdpIdCreated.collateral))
 	  assert(cdpId === cdpIdCreated.id)
 	  // assert(false)
     })
