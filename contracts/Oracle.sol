@@ -11,7 +11,7 @@ contract Oracle {
 		emit Fulfilled(id, value);
 	}
 
-	function get (bytes32 id, uint256 value) {
+	function get (bytes32 id, uint256 value) public {
 		emit Fulfilled(id, value);
 	}
 }
