@@ -1,14 +1,11 @@
 contract Oracle {
-
-	event Requested(string url, string selector);
-	function request(bytes32 id, string url, string selector) public {
-		// bytes32 id = keccak256(url,selector);
+	event Requested(bytes32 id, string url, string selector);
+	function request (bytes32 id, string url, string selector) public {
 		emit Requested(id, url, selector);
 	}
 
-	event Fulfilled(bytes32 id, uint256 value);
-	function fulfil(id , value) {
+	event Fulfilled (bytes32 id, uint256 value);
+	function fulfil (bytes32 id, uint256 value) {
 		emit Fulfilled(id, value);
 	}
-
 }
