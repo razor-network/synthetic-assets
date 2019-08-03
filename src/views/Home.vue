@@ -22,12 +22,13 @@
         <div class="input-group m-0">
           <input class="form-control" v-model="valueOnChainInEth" readonly>
           <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="button" @click="request">Update</button>
             <button class="btn btn-outline-primary" type="button" @click="read">Refresh</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="row row-space-4" v-if="erc20Address">
+    <div class="row row-space-4" v-if="erc20Address && erc20Address !== ZEROX">
       <div class="col-md-6">
         <label>ERC20 Contract Address</label>
         <input class="form-control" v-model="erc20Address" readonly>
@@ -43,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="row row-space-4" v-if="erc20Address">
+    <div class="row row-space-4" v-if="erc20Address && erc20Address !== ZEROX">
       <div class="col-md-6">
         <label>Collateral</label>
 
@@ -78,16 +79,6 @@
             </div>
 
             <button class="btn btn-block btn-primary" @click="mint">Mint</button>
-            <button class="btn btn-block btn-primary mt-4" @click="cdps" v-if="tx">CDP</button>
-
-            <div v-if="tx" class="font-weight-normal mt-4">
-              Value: {{tx}}
-            </div>
-
-            <div v-if="tx && cdpResult" class="font-weight-normal mt-4">
-              Collateral: {{cdpResult.collateral}}<br/>
-              Balance: {{cdpResult.balance}}<br/>
-            </div>
           </div>
         </div>
       </div>
@@ -101,15 +92,7 @@
               <input class="form-control" v-model="tokens" type="number">
             </div>
 
-            <button class="btn btn-block btn-primary" @click="burn.go" v-if="burn.go">Burn</button>
-            <div v-if="tx" class="font-weight-normal mt-4">
-              Value: {{tx}}
-            </div>
-
-            <div v-if="tx && cdpResult" class="font-weight-normal mt-4">
-              Collateral: {{cdpResult.collateral}}<br/>
-              Balance: {{cdpResult.balance}}<br/>
-            </div>
+            <button class="btn btn-block btn-primary" @click="burn">Burn</button>
           </div>
         </div>
       </div>
@@ -121,10 +104,9 @@
 import Web3 from 'web3'
 import { request, read, mint, cdps, balanceOf, burn, getContractAddress } from '@/utils/commons'
 
+const ZEROX = '0x0000000000000000000000000000000000000000'
+
 export default {
-  created: function () {
-    this.burn = {}
-  },
   data: function () {
     return {
       url: null,
@@ -140,7 +122,8 @@ export default {
       erc20Address: null,
       userErc20Balance: null,
       collateral: null,
-      debt: null
+      debt: null,
+      ZEROX
     }
   },
   computed: {
@@ -151,14 +134,13 @@ export default {
   },
   watch: {
     assetId: async function (newValue) {
-      this.erc20Address = await getContractAddress(newValue)
       this.read()
-      this.updateUserBalance()
-      this.updateCdpInfo()
     }
   },
   methods: {
     updateUserBalance: async function () {
+      if (!this.erc20Address || this.erc20Address === ZEROX) return
+
       this.userErc20Balance = (await balanceOf(this.erc20Address)) / 1e18
     },
     updateCdpInfo: async function () {
@@ -172,14 +154,21 @@ export default {
       this.read()
     },
     read: async function () {
+      this.erc20Address = await getContractAddress(this.assetId)
+
       const valueOnChainInEth = await read(this.assetId)
 
       this.valueOnChainInEth = valueOnChainInEth / 1e18
+
+      await this.updateUserBalance()
+      await this.updateCdpInfo()
     },
     mint: async function () {
       const { tx } = await mint(this.url, this.selector, this.eth)
 
       this.tx = tx
+
+      this.read()
     },
     cdps: async function () {
       const cdpResult = await cdps(this.assetId)
@@ -189,10 +178,9 @@ export default {
         collateral: cdpResult.collateral / 1e18,
         balance: (balance / 1e18) / 1e18
       }
-
-      this.burn.go = () => {
-        return burn(this.assetId, cdpResult.tokenAddress, this.tokens)
-      }
+    },
+    burn: function () {
+      return burn(this.assetId, this.erc20Address, this.tokens)
     }
   }
 }
