@@ -53,6 +53,18 @@ export const mint = async (url, selector, value) => {
     tx: res.transactionHash
   }
 }
+export const cdpId = async (id) => {
+  const accounts = await web3.eth.getAccounts()
+  return web3.utils.soliditySha3(accounts[0], id)
+}
+export const liquidate = async (cdpId) => {
+  const accounts = await web3.eth.getAccounts()
+  const res = await CDPFactory.methods.liquidate(cdpId).send({
+    from: accounts[0]
+  })
+
+  return res
+}
 export const cdps = async (id) => {
   const accounts = await web3.eth.getAccounts()
   const cdpId = web3.utils.soliditySha3(accounts[0], id)

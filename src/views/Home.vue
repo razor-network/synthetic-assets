@@ -18,12 +18,20 @@
         <input class="form-control" v-model="assetId" readonly>
       </div>
       <div class="col-md-6">
+        <label>CDP ID</label>
+        <input class="form-control" v-model="cdpId" readonly>
+      </div>
+      <div class="col-md-6">
+        <label>Collateral Ratio</label>
+        <input class="form-control" v-model="ratio" readonly>
+      </div>
+      <div class="col-md-6">
         <label>Asset Value in ETH on-chain</label>
         <div class="input-group m-0">
           <input class="form-control" v-model="valueOnChainInEth" readonly>
           <div class="input-group-append">
             <button class="btn btn-outline-primary" type="button" @click="request">Update</button>
-            <button class="btn btn-outline-primary" type="button" @click="read">Refresh</button>
+            <button class="btn btn-outline-primary" type="button" @click="read">Read</button>
           </div>
         </div>
       </div>
@@ -67,8 +75,8 @@
       </div>
     </div>
 
-    <div class="row row-space-4">
-      <div class="col-md-6">
+    <div class="row row-space-4" v-if="assetId">
+      <div class="col-md-4">
         <div class="card">
           <div class="card-body">
             <h4 class="mb-4">Mint</h4>
@@ -82,7 +90,16 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4">Liquidate</h4>
+
+            <button disabled class="btn btn-block btn-primary" @click="liquidate">Liquidate</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
         <div class="card">
           <div class="card-body">
             <h4 class="mb-4">Burn</h4>
@@ -102,7 +119,8 @@
 
 <script>
 import Web3 from 'web3'
-import { request, read, mint, cdps, balanceOf, burn, getContractAddress } from '@/utils/commons'
+import BN from 'bignumber.js'
+import { request, read, mint, cdps, balanceOf, burn, getContractAddress, cdpId, liquidate } from '@/utils/commons'
 
 const ZEROX = '0x0000000000000000000000000000000000000000'
 
@@ -123,7 +141,9 @@ export default {
       userErc20Balance: null,
       collateral: null,
       debt: null,
-      ZEROX
+      ZEROX,
+      cdpId: null,
+      ratio: null
     }
   },
   computed: {
@@ -162,6 +182,9 @@ export default {
 
       await this.updateUserBalance()
       await this.updateCdpInfo()
+
+      this.cdpId = await cdpId(this.assetId)
+      this.ratio = (new BN(this.collateral).dividedBy(this.valueOnChainInEth)).toString()
     },
     mint: async function () {
       const { tx } = await mint(this.url, this.selector, this.eth)
@@ -181,6 +204,9 @@ export default {
     },
     burn: function () {
       return burn(this.assetId, this.erc20Address, this.tokens)
+    },
+    liquidate: function () {
+      return liquidate(this.cdpId)
     }
   }
 }
