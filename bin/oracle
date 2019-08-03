@@ -3,6 +3,7 @@
 const _ = require('lodash')
 const axios = require('axios')
 const Web3 = require('web3')
+const KrakenClient = require('kraken-api')
 
 const { FROM_ADDRESS } = process.env
 
@@ -11,9 +12,11 @@ if (!FROM_ADDRESS) {
 }
 
 let count = 0
+const kraken = new KrakenClient()
 const OracleBuild = require('../build/contracts/Oracle.json')
 const web3 = new Web3('ws://localhost:8545')
 
+const _1e18 = new web3.utils.BN('1000000000000000000')
 const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['420'].address)
 
 Oracle.events.Requested(async (err, event) => {
@@ -26,9 +29,23 @@ Oracle.events.Requested(async (err, event) => {
   console.log(`[${count}]`, '🙏🏻', '\t', url, '\t', selector)
 
   const response = await axios.get(url)
-  const value = Math.round(_.get(response.data, selector))
+  let value = _.get(response.data, selector)
 
-  console.log(`[${count}]`, '✍🏻', '\t', value, '\t', (await Oracle.methods.fulfil(id, value).send({
+  value = new web3.utils.BN(Math.floor(value))
+
+  let prr = await kraken.api('Ticker', { pair: 'XETHZUSD' })
+  prr = Math.floor(prr.result.XETHZUSD.c[0])
+  console.log('prr', prr)
+
+  prr = new web3.utils.BN(prr)
+  value = value.mul(_1e18)
+  console.log('after mul', value.toString())
+  value = value.div(prr)
+
+  console.log('after div', value.toString())
+
+
+  console.log(`[${count}]`, '✍🏻', '\t', value.toString(), '\t', (await Oracle.methods.fulfil(id, web3.utils.numberToHex(value)).send({
     from: FROM_ADDRESS
   })).transactionHash)
 
