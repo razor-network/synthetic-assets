@@ -84,7 +84,7 @@ contract CDPFactory {
 			revert("price cannot be 0");
 		}
 		uint256 toReturn = amount/price;
-		require(toReturn <= cdp.collateral);
+		require(toReturn <= cdp.collateral/COLLATERAL_RATIO);
 		// emit Debug(toReturn);
 		// emit Debug(toMint);
 
@@ -111,11 +111,14 @@ contract CDPFactory {
 		}
 		uint256 amount = cdp.debt;
 		uint256 toReturn = amount/price;
-		address owner = cdp.owner;
+		emit DebugUint256(amount);
+		emit DebugUint256(price);
+		emit DebugUint256(toReturn);
+		// address owner = cdp.owner;
 		// SimpleToken st = SimpleToken(contracts[cdp.assetId]);
 		if((toReturn/cdp.collateral)<COLLATERAL_RATIO) {
 			cdp.collateral = 0;
-			msg.sender.transfer(toReturn);
+			msg.sender.transfer(cdp.collateral);
 			// st.burnFrom(owner, cdp.debt);
 		}
 		// emit Debug(toReturn);
