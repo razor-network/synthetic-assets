@@ -66,3 +66,20 @@ export const balanceOf = async (erc20Address) => {
 
   return value
 }
+export const burn = async (id, erc20Address, tokens) => {
+  const SimpleToken = new web3.eth.Contract(SimpleTokenBuild.abi, erc20Address)
+
+  const accounts = await web3.eth.getAccounts()
+
+  await SimpleToken.methods.approve(CDPFactoryBuild.networks['420'].address, tokens).send({
+    from: accounts[0]
+  })
+
+  const res = await CDPFactory.methods.burn(id, tokens).send({
+    from: accounts[0]
+  })
+
+  return {
+    tx: res.transactionHash
+  }
+}

@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="row row-space-4" v-if="id">
+    <div class="row row-space-4">
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
@@ -55,6 +55,28 @@
             <button class="btn btn-block btn-primary" @click="mint">Mint</button>
             <button class="btn btn-block btn-primary mt-4" @click="cdps" v-if="tx">CDP</button>
 
+            <div v-if="tx" class="font-weight-normal mt-4">
+              Value: {{tx}}
+            </div>
+
+            <div v-if="tx && cdpResult" class="font-weight-normal mt-4">
+              Collateral: {{cdpResult.collateral}}<br/>
+              Balance: {{cdpResult.balance}}<br/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4">Burn</h4>
+
+            <div class="mb-4">
+              <label># Tokens</label>
+              <input class="form-control" v-model="tokens" type="number">
+            </div>
+
+            <button class="btn btn-block btn-primary" @click="burn">Burn</button>
             <div v-if="tx" class="font-weight-normal mt-4">
               Value: {{tx}}
             </div>
@@ -84,7 +106,8 @@ export default {
       value: null,
       eth: null,
       tx: null,
-      cdpResult: null
+      cdpResult: null,
+      tokens: null
     }
   },
   methods: {
