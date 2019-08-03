@@ -3,7 +3,7 @@
     <div class="top-bar">
       <div class="container d-flex">
         <div class="brand">
-          <strong>Oracle</strong>
+          <strong>Razor Synthetic Assets</strong>
         </div>
       </div>
     </div>

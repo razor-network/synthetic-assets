@@ -35,15 +35,10 @@ Oracle.events.Requested(async (err, event) => {
 
   let prr = await kraken.api('Ticker', { pair: 'XETHZUSD' })
   prr = Math.floor(prr.result.XETHZUSD.c[0])
-  console.log('prr', prr)
 
   prr = new web3.utils.BN(prr)
   value = value.mul(_1e18)
-  console.log('after mul', value.toString())
   value = value.div(prr)
-
-  console.log('after div', value.toString())
-
 
   console.log(`[${count}]`, '✍🏻', '\t', value.toString(), '\t', (await Oracle.methods.fulfil(id, web3.utils.numberToHex(value)).send({
     from: FROM_ADDRESS

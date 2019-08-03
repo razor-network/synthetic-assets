@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Web3 from 'web3'
+import BN from 'bignumber.js'
 
 import OracleBuild from '../../build/contracts/Oracle.json'
 import CDPFactoryBuild from '../../build/contracts/CDPFactory.json'
@@ -32,6 +33,9 @@ export const request = async (url, selector) => {
     tx: res.transactionHash
   }
 }
+export const getContractAddress = (assetId) => {
+  return CDPFactory.methods.contracts(assetId).call()
+}
 export const read = async (id) => {
   return Oracle.methods.read(id).call()
 }
@@ -49,6 +53,18 @@ export const mint = async (url, selector, value) => {
     tx: res.transactionHash
   }
 }
+export const cdpId = async (id) => {
+  const accounts = await web3.eth.getAccounts()
+  return web3.utils.soliditySha3(accounts[0], id)
+}
+export const liquidate = async (cdpId) => {
+  const accounts = await web3.eth.getAccounts()
+  const res = await CDPFactory.methods.liquidate(cdpId).send({
+    from: accounts[0]
+  })
+
+  return res
+}
 export const cdps = async (id) => {
   const accounts = await web3.eth.getAccounts()
   const cdpId = web3.utils.soliditySha3(accounts[0], id)
@@ -64,5 +80,25 @@ export const balanceOf = async (erc20Address) => {
 
   const value = await SimpleToken.methods.balanceOf(accounts[0]).call()
 
-  return value
+  return value / 1e18
+}
+export const burn = async (id, erc20Address, tokens) => {
+  tokens = new BN(tokens)
+  tokens = tokens.times(1e18).times(1e18).toString(16)
+
+  const SimpleToken = new web3.eth.Contract(SimpleTokenBuild.abi, erc20Address)
+
+  const accounts = await web3.eth.getAccounts()
+
+  await SimpleToken.methods.approve(CDPFactoryBuild.networks['420'].address, `0x${tokens}`).send({
+    from: accounts[0]
+  })
+
+  const res = await CDPFactory.methods.burn(id, `0x${tokens}`).send({
+    from: accounts[0]
+  })
+
+  return {
+    tx: res.transactionHash
+  }
 }
