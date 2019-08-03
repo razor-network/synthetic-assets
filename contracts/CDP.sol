@@ -25,14 +25,14 @@ contract CDP {
 
 	event Debug(uint256);
 	function mint(string memory url, string memory selector) public payable
-	//only oracle 
+	//only oracle
 	{
 		Oracle oracle = Oracle(oracleAddress);
 		bytes32 id = keccak256(abi.encodePacked(url, selector));
 
 		uint256 val = msg.value;
 		address sender = msg.sender;
-		uint256 price = oracle.get(id);
+		uint256 price = oracle.read(id);
 		uint256 toMint = msg.value/price;
 		// emit Debug(toMint);
 		if (contracts[id] == 0x0000000000000000000000000000000000000000) {

@@ -23,7 +23,7 @@ contract('CDP', function (accounts) {
 // assert(false)
       // let address  = await cdp.contracts('0x0')
       // console.log(address)
-    
+
     })
 
 
@@ -37,27 +37,29 @@ contract('CDP', function (accounts) {
 
       let id = web3.utils.soliditySha3(url,selector)
       console.log('id',id)
+
       let value = '888'
       oracle.fulfil(id, value)
 
-    
-    }) 
+
+    })
  it('should be able to get', async function () {
       // console.log(web3i.eth.accounts)
 
       let oracle = await Oracle.deployed()
       // let sch = await SimpleToken.deployed()
+
           let url = 'goog.com'
       let selector = 'loleverything'
       let id = web3.utils.soliditySha3(url,selector)
             console.log('id',id)
 
       let value = 888
-      let val = Number(await oracle.get(id))
+      let val = Number(await oracle.read(id))
       assert(val==value)
 
-    
-   
+
+
     })
 
   it('should be able to match hash', async function () {
