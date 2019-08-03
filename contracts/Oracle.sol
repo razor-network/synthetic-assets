@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
-contract Oracle {
 
+contract Oracle {
 	mapping (bytes32 => uint256) values;
 
 	event Requested(bytes32 id, string url, string selector);
