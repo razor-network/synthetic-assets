@@ -29,11 +29,11 @@ contract('CDP', function (accounts) {
       await oracle.fulfil(id, value)
       await cdp.mint(url, selector,  {value: eth, from: accounts[0]})
 	  let address = await cdp.contracts(id)    
-	  console.log(address)
-	  assert(address != '0x0000000000000000000000000000000000000000')
+	  console.log('address', address)
+	  assert(address !== '0x0000000000000000000000000000000000000000')
 	  st = await SimpleToken.at(address)
 	  // console.log('st',st)
-	  console.log(Number(await st.balanceOf(accounts[0])))
+	  assert(Number(await st.balanceOf(accounts[0])) ===1)
     })
 
     it('should be able to get contract address', async function () {
@@ -43,7 +43,7 @@ contract('CDP', function (accounts) {
       // let sch = await SimpleToken.deployed()
 
       let address  = await cdp.contracts('0x0')
-      console.log(address)
+      assert(address ==='0x0000000000000000000000000000000000000000')
     
     })
 })
