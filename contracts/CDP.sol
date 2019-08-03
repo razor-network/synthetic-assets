@@ -1,11 +1,6 @@
-// functions
-// deposit with eth here
-// fetch price from oracle oracle.sol
-// mint appropriate erc 20 token erc20 factory.sol
-// give token to user this
 pragma solidity ^0.5.8;
-// function to burn token to return deposit this
 // function to liquidate (optional) this
+//collateralization ratio
 import "./SimpleToken.sol";
 import "./Oracle.sol";
 contract CDP {
@@ -54,6 +49,9 @@ contract CDP {
 
 		address sender = msg.sender;
 		uint256 price = oracle.read(id);
+		if(price==0) {
+			revert("price cannot be 0");
+		}
 		uint256 toReturn = amount*price;
 		// emit Debug(toReturn);
 		// emit Debug(toMint);
