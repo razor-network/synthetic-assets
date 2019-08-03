@@ -29,10 +29,20 @@ contract CDP {
 		Oracle oracle = Oracle(oracleAddress);
 		bytes32 id = keccak256(abi.encode(url, selector));
 
-		SimpleToken st = new SimpleToken();
 		uint256 val = msg.value;
 		address sender = msg.sender;
-		// uint256 price = Oracle.get(id);
+		uint256 price = oracle.get(id);
+		uint256 toMint = msg.value/price;
+		if (contracts[id] == 0x0000000000000000000000000000000000000000) {
+			SimpleToken _st = new SimpleToken();
+			address ad = address(_st);
+			contracts[id] = ad;
+		}
+		SimpleToken st = SimpleToken(contracts[id]);
+		st.addMinter(msg.sender);
+		st.mint(sender, toMint);
+		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
+
 
 	}
 
