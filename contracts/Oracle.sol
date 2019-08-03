@@ -7,11 +7,6 @@ contract Oracle {
 
 	event Fulfilled (bytes32 id, uint256 value);
 	function fulfil (bytes32 id, uint256 value) public {
-
-		emit Fulfilled(id, value);
-	}
-
-	function get (bytes32 id, uint256 value) {
 		emit Fulfilled(id, value);
 	}
 }
