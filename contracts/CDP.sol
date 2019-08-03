@@ -10,18 +10,29 @@ import "./SimpleToken.sol";
 import "./Oracle.sol";
 contract CDP {
 	mapping (bytes32 => address) public contracts;
-	Oracle oracle = Oracle(0x0);
-	function createRequest(string memory url, string memory selector) public payable {
-		uint256 val = msg.value;
-		address sender = msg.sender;
+
+	address public oracleAddress;
+	constructor (address _oracleAddress) public {
+		oracleAddress = _oracleAddress;
+	}
+
+	function createRequest(string memory url, string memory selector) public {
+		Oracle oracle = Oracle(oracleAddress);
+
 		bytes32 id = keccak256(abi.encode(url, selector));
 		oracle.request(id, url, selector);
 	}
 
-	function mint() public
+	function mint(string memory url, string memory selector) public payable
 	//only oracle 
 	{
+		Oracle oracle = Oracle(oracleAddress);
+		bytes32 id = keccak256(abi.encode(url, selector));
+
 		SimpleToken st = new SimpleToken();
+		uint256 val = msg.value;
+		address sender = msg.sender;
+		// uint256 price = Oracle.get(id);
 
 	}
 
