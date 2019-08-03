@@ -4,7 +4,8 @@ contract Oracle {
 	mapping (bytes32 => uint256) values;
 
 	event Requested(bytes32 id, string url, string selector);
-	function request (bytes32 id, string memory url, string memory selector) public {
+	function request (string memory url, string memory selector) public {
+		bytes32 id = stringHash(url,selector);
 		emit Requested(id, url, selector);
 	}
 
@@ -16,5 +17,10 @@ contract Oracle {
 
 	function get (bytes32 id) public view returns (uint256) {
 		return values[id];
+	}
+
+	function stringHash(string memory a, string memory b) public view returns(bytes32) {
+		return(keccak256(abi.encodePacked(a,b)));
+
 	}
 }
