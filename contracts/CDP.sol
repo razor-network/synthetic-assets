@@ -1,47 +1,67 @@
-// functions
-// deposit with eth here
-// fetch price from oracle oracle.sol
-// mint appropriate erc 20 token erc20 factory.sol
-// give token to user this
 pragma solidity ^0.5.8;
-// function to burn token to return deposit this
 // function to liquidate (optional) this
+//collateralization ratio
 import "./SimpleToken.sol";
 import "./Oracle.sol";
 contract CDP {
 	mapping (bytes32 => address) public contracts;
 
 	address public oracleAddress;
-	constructor (address _oracleAddress) public {
+	function constructory (address _oracleAddress) public {
 		oracleAddress = _oracleAddress;
 	}
 
-	function createRequest(string memory url, string memory selector) public {
-		Oracle oracle = Oracle(oracleAddress);
+	// function createRequest(string memory url, string memory selector) public {
+	// 	Oracle oracle = Oracle(oracleAddress);
 
-		bytes32 id = keccak256(abi.encode(url, selector));
-		oracle.request(id, url, selector);
-	}
+	// 	bytes32 id = keccak256(abi.encode(url, selector));
+	// 	oracle.request(id, url, selector);
+	// }
 
+	event Debug(uint256);
 	function mint(string memory url, string memory selector) public payable
 	//only oracle
 	{
 		Oracle oracle = Oracle(oracleAddress);
-		bytes32 id = keccak256(abi.encode(url, selector));
+		bytes32 id = keccak256(abi.encodePacked(url, selector));
 
 		uint256 val = msg.value;
 		address sender = msg.sender;
 		uint256 price = oracle.read(id);
 		uint256 toMint = msg.value/price;
+		// emit Debug(toMint);
 		if (contracts[id] == 0x0000000000000000000000000000000000000000) {
 			SimpleToken _st = new SimpleToken();
 			address ad = address(_st);
 			contracts[id] = ad;
 		}
 		SimpleToken st = SimpleToken(contracts[id]);
-		st.addMinter(msg.sender);
+		// st.addMinter(msg.sender);
 		st.mint(sender, toMint);
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
+
+
+	}
+
+		function burn(bytes32 id, uint256 amount) public 	
+		{
+		Oracle oracle = Oracle(oracleAddress);
+
+		address sender = msg.sender;
+		uint256 price = oracle.read(id);
+		if(price==0) {
+			revert("price cannot be 0");
+		}
+		uint256 toReturn = amount*price;
+		// emit Debug(toReturn);
+		// emit Debug(toMint);
+
+		SimpleToken st = SimpleToken(contracts[id]);
+		st.burnFrom(sender, amount);
+		msg.sender.transfer(toReturn);
+		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
+		// how much eth to returnj? token = ethprice/assetprice * eth
+		// eth = token/price
 
 
 	}
