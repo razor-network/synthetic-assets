@@ -53,9 +53,15 @@
             </div>
 
             <button class="btn btn-block btn-primary" @click="mint">Mint</button>
+            <button class="btn btn-block btn-primary mt-4" @click="cdps" v-if="tx">CDP</button>
 
             <div v-if="tx" class="font-weight-normal mt-4">
               Value: {{tx}}
+            </div>
+
+            <div v-if="tx && cdpResult" class="font-weight-normal mt-4">
+              Collateral: {{cdpResult.collateral}}<br/>
+              Balance: {{cdpResult.balance}}<br/>
             </div>
           </div>
         </div>
@@ -65,7 +71,7 @@
 </template>
 
 <script>
-import { request, read, mint } from '@/utils/commons'
+import { request, read, mint, cdps, balanceOf } from '@/utils/commons'
 
 export default {
   data: function () {
@@ -77,7 +83,8 @@ export default {
       id: null,
       value: null,
       eth: null,
-      tx: null
+      tx: null,
+      cdpResult: null
     }
   },
   methods: {
@@ -95,6 +102,15 @@ export default {
       const { tx } = await mint(this.url, this.selector, this.eth)
 
       this.tx = tx
+    },
+    cdps: async function () {
+      const cdpResult = await cdps(this.id)
+      const balance = await balanceOf(cdpResult.tokenAddress)
+
+      this.cdpResult = {
+        collateral: cdpResult.collateral / 1e18,
+        balance: (balance / 1e18) / 1e18
+      }
     }
   }
 }

@@ -23,17 +23,17 @@ contract('CDPFactory', function (accounts) {
       let selector = 'loleverything'
       let id = await web3.utils.soliditySha3({type:"string", value:url},{type:"string",value:selector});
       console.log('id lol', id)
-      let value = new web3.utils.BN('2')
+      let value = new web3.utils.BN('204')
       // console.log('value', value)
       let eth = new web3.utils.BN('1000000000000000000')
-      let expectedBalance = new web3.utils.BN('2000000000000000000')
+      let expectedBalance = new web3.utils.BN('204000000000000000000')
       await oracle.request(url, selector)
       await oracle.fulfil(id, value)
       await cdp.mint(url, selector,  {value: eth, from: accounts[0]})
       let cdpId = web3.utils.soliditySha3(accounts[0], id)
       console.log('cdpId', cdpId)
       await cdp.mint(url, selector,  {value: eth, from: accounts[1]})
-	  let address = await cdp.contracts(id)    
+	  let address = await cdp.contracts(id)
 	  console.log('address', address)
 	  assert(address !== '0x0000000000000000000000000000000000000000')
 	  st = await SimpleToken.at(address)
@@ -63,7 +63,7 @@ contract('CDPFactory', function (accounts) {
       await oracle.fulfil(id, value)
       let price=  await oracle.read(id)
       console.log('price', Number(price))
-	  let address = await cdp.contracts(id)    
+	  let address = await cdp.contracts(id)
 	  console.log('address', address)
        st = await SimpleToken.at(address)
        await st.approve(cdp.address, 1)
@@ -79,7 +79,7 @@ contract('CDPFactory', function (accounts) {
       assert(Number(thiscdp.collateral) === 0)
       // assert(Number(await web3.eth.getBalance(accounts[0])) === balanceBefore + 1)
 	  // assert(address !== '0x0000000000000000000000000000000000000000')
-	 
+
 	  // // console.log('st',st)
 	  // assert(Number(await st.balanceOf(accounts[0])) ===1)
     })
@@ -105,7 +105,7 @@ contract('CDPFactory', function (accounts) {
       await oracle.fulfil(id, value)
       let price=  await oracle.read(id)
       console.log('price', Number(price))
-	  let address = await cdp.contracts(id)    
+	  let address = await cdp.contracts(id)
 	  console.log('address', address)
        st = await SimpleToken.at(address)
        // await st.approve(cdp.address, 1)
@@ -125,7 +125,7 @@ contract('CDPFactory', function (accounts) {
       // console.log('difference' , Number(await web3.eth.getBalance(accounts[0])) - balanceBefore )
       // assert(Number(await web3.eth.getBalance(accounts[0])) === balanceBefore + 1)
 	  // assert(address !== '0x0000000000000000000000000000000000000000')
-	 
+
 	  // // console.log('st',st)
 	  // assert(Number(await st.balanceOf(accounts[0])) ===1)
     })
@@ -138,7 +138,7 @@ contract('CDPFactory', function (accounts) {
 
   //     let address  = await cdp.contracts('0x0')
   //     assert(address ==='0x0000000000000000000000000000000000000000')
-    
+
   //   })
 })
 })
