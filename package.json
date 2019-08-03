@@ -1,0 +1,25 @@
+{
+  "name": "minter",
+  "version": "1.0.0",
+  "description": "npm install @openzeppelin/contracts",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hrishikeshio/minter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hrishikeshio/minter/issues"
+  },
+  "homepage": "https://github.com/hrishikeshio/minter#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^2.3.0"
+  }
+}
