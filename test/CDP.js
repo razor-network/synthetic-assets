@@ -23,8 +23,9 @@ contract('CDP', function (accounts) {
       let selector = 'loleverything'
       let id = await web3.utils.soliditySha3({type:"string", value:url},{type:"string",value:selector});
       console.log('id lol', id)
-      let value = 888
-      let eth = 888
+      let value = new web3.utils.BN('1000000000000000000')
+      // console.log('value', value)
+      let eth = new web3.utils.BN('1000000000000000000')
       await oracle.request(url, selector)
       await oracle.fulfil(id, value)
       await cdp.mint(url, selector,  {value: eth, from: accounts[0]})
@@ -32,8 +33,44 @@ contract('CDP', function (accounts) {
 	  console.log('address', address)
 	  assert(address !== '0x0000000000000000000000000000000000000000')
 	  st = await SimpleToken.at(address)
-	  // console.log('st',st)
+	  console.log('st', Number(await st.balanceOf(accounts[0])))
 	  assert(Number(await st.balanceOf(accounts[0])) ===1)
+    })
+
+  it('should be able to burn', async function () {
+      // console.log(web3i.eth.accounts)
+
+      let cdp = await CDP.deployed()
+
+      let oracle = await Oracle.deployed()
+      console.log('addre',oracle.address)
+      await cdp.constructory(oracle.address)
+      let url = 'goog.com'
+      let selector = 'loleverything'
+      let id = await web3.utils.soliditySha3({type:"string", value:url},{type:"string",value:selector});
+      console.log('id lol', id)
+      let value = new web3.utils.BN('1000000000000000000')
+      let eth = new web3.utils.BN('1000000000000000000')
+      await oracle.request(url, selector)
+      await oracle.fulfil(id, value)
+      let price=  await oracle.read(id)
+      console.log('price', Number(price))
+	  let address = await cdp.contracts(id)    
+	  console.log('address', address)
+       st = await SimpleToken.at(address)
+       await st.approve(cdp.address, 1)
+
+      let balanceBefore = Number(await web3.eth.getBalance(accounts[0]))
+      console.log('balanceBefore',balanceBefore)
+      let tx = await cdp.burn(id, 1)
+      // console.log(tx)
+      console.log('balanceAfter' , Number(await web3.eth.getBalance(accounts[0])))
+      console.log('difference' , Number(await web3.eth.getBalance(accounts[0])) - balanceBefore )
+      // assert(Number(await web3.eth.getBalance(accounts[0])) === balanceBefore + 1)
+	  // assert(address !== '0x0000000000000000000000000000000000000000')
+	 
+	  // // console.log('st',st)
+	  // assert(Number(await st.balanceOf(accounts[0])) ===1)
     })
 
     it('should be able to get contract address', async function () {
