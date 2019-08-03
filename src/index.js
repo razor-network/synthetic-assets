@@ -13,23 +13,17 @@ Oracle.events.Requested(async (err, event) => {
   }
 
   const { id, url, selector } = event.returnValues
-
   console.log('REQ', id, url, selector)
 
   const response = await axios.get(url)
   const value = Math.round(_.get(response.data, selector))
-
   console.log('VALUE', value)
 
   const res = await Oracle.methods.fulfil(id, value).send({
     from: '0x384160b7b9Ab9A9025F6163e5E1B1f2d4914DCb9'
   })
-
   console.log(res)
 
-  const resCall = await Oracle.methods.get(id).call({
-    from: '0x384160b7b9Ab9A9025F6163e5E1B1f2d4914DCb9'
-  })
-
+  const resCall = await Oracle.methods.read(id).call()
   console.log(resCall)
 })

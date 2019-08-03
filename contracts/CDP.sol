@@ -24,14 +24,14 @@ contract CDP {
 	}
 
 	function mint(string memory url, string memory selector) public payable
-	//only oracle 
+	//only oracle
 	{
 		Oracle oracle = Oracle(oracleAddress);
 		bytes32 id = keccak256(abi.encode(url, selector));
 
 		uint256 val = msg.value;
 		address sender = msg.sender;
-		uint256 price = oracle.get(id);
+		uint256 price = oracle.read(id);
 		uint256 toMint = msg.value/price;
 		if (contracts[id] == 0x0000000000000000000000000000000000000000) {
 			SimpleToken _st = new SimpleToken();
