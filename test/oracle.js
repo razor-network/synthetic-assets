@@ -38,6 +38,20 @@ contract('CDP', function (accounts) {
       oracle.fulfil(id, value)
 
     
-    })
+    }) 
+ it('should be able to get', async function () {
+      // console.log(web3i.eth.accounts)
 
-    })})
+      let oracle = await Oracle.deployed()
+      // let sch = await SimpleToken.deployed()
+    
+      let id = '0x0000000000000000000000000000000000000000'
+      let value = 888
+      let val = Number(await oracle.get(id))
+      assert(val==value)
+
+    
+   
+    })
+})
+})
