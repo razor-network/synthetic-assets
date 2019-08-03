@@ -5,7 +5,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "standard"
+    "test": "standard",
+    "migrate": "truffle migrate"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,8 @@
   "homepage": "https://github.com/hrishikeshio/minter#readme",
   "dependencies": {
     "@openzeppelin/contracts": "^2.3.0",
+    "axios": "^0.19.0",
+    "lodash": "^4.17.15",
     "web3": "^1.2.0"
   },
   "devDependencies": {
