@@ -1,0 +1,31 @@
+@mixin alert-variant($background, $border, $color) {
+  color: $color;
+  @include gradient-bg($background);
+  border-color: $border;
+  border-top: 3px solid $color;
+  font-weight: 400;
+
+  hr {
+    border-top-color: adjust-color($color, $alpha: -0.85);
+  }
+
+  .alert-link {
+    color: $color;
+
+    .icon-external-window {
+      .secondary, .primary {
+        fill: $color;
+      }
+    }
+  }
+
+  svg {
+    .primary {
+      fill: adjust-color($background, $lightness: -15);
+    }
+
+    .secondary {
+      fill: $color;
+    }
+  }
+}

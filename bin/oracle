@@ -1,7 +1,16 @@
+#! /usr/bin/env node
+
 const _ = require('lodash')
 const axios = require('axios')
 const Web3 = require('web3')
 
+const { FROM_ADDRESS } = process.env
+
+if (!FROM_ADDRESS) {
+  throw new Error('Set FROM_ADDRESS=0x...')
+}
+
+let count = 0
 const OracleBuild = require('../build/contracts/Oracle.json')
 const web3 = new Web3('ws://localhost:8545')
 
@@ -12,18 +21,18 @@ Oracle.events.Requested(async (err, event) => {
     return
   }
 
+  count++
   const { id, url, selector } = event.returnValues
-  console.log('REQ', id, url, selector)
+  console.log(`[${count}]`, '🙏🏻', '\t', url, '\t', selector)
 
   const response = await axios.get(url)
   const value = Math.round(_.get(response.data, selector))
-  console.log('VALUE', value)
 
-  const res = await Oracle.methods.fulfil(id, value).send({
-    from: '0x384160b7b9Ab9A9025F6163e5E1B1f2d4914DCb9'
-  })
-  console.log(res)
+  console.log(`[${count}]`, '✍🏻', '\t', value, '\t', (await Oracle.methods.fulfil(id, value).send({
+    from: FROM_ADDRESS
+  })).transactionHash)
 
-  const resCall = await Oracle.methods.read(id).call()
-  console.log(resCall)
+  console.log(`[${count}]`, '🔏', '\t', await Oracle.methods.read(id).call())
 })
+
+console.log('Watching for requests...')

@@ -1,0 +1,51 @@
+$left-menu-width: 14rem;
+$top-bar-height: 3.6rem;
+$border-top-height: 3px;
+$left-menu-left-padding: 1.6rem;
+
+.top-bar {
+  border-top: $border-top-height solid $sorange;
+  top: 0;
+}
+
+.app-base {
+  margin-top: $top-bar-height + 1rem;
+}
+
+.top-bar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: $top-bar-height;
+  z-index: $zindex-fixed;
+  background: $body-bg;
+
+  .container {
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  background: $body-bg;
+
+  a {
+    text-decoration: none;
+
+    &:hover, &:active, &:focus {
+      text-decoration: none;
+    }
+  }
+}
+
+.scrolled {
+  .top-bar {
+    box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 1px 1px 3px 0 rgba(63,63,68,0.15);
+  }
+}
