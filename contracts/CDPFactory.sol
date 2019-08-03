@@ -90,6 +90,7 @@ contract CDPFactory {
 
 		SimpleToken st = SimpleToken(contracts[id]);
 		cdp.collateral = cdp.collateral - toReturn;
+		cdp.debt = cdp.debt - amount;
 		st.burnFrom(sender, amount);
 		msg.sender.transfer(toReturn);
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
@@ -114,6 +115,7 @@ contract CDPFactory {
 		// SimpleToken st = SimpleToken(contracts[cdp.assetId]);
 		if((toReturn/cdp.collateral)<COLLATERAL_RATIO) {
 			cdp.collateral = 0;
+			msg.sender.transfer(toReturn);
 			// st.burnFrom(owner, cdp.debt);
 		}
 		// emit Debug(toReturn);
