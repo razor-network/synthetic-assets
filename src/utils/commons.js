@@ -32,6 +32,9 @@ export const request = async (url, selector) => {
     tx: res.transactionHash
   }
 }
+export const getContractAddress = (assetId) => {
+  return CDPFactory.methods.contracts(assetId).call()
+}
 export const read = async (id) => {
   return Oracle.methods.read(id).call()
 }
@@ -64,9 +67,10 @@ export const balanceOf = async (erc20Address) => {
 
   const value = await SimpleToken.methods.balanceOf(accounts[0]).call()
 
-  return value
+  return value / 1e18
 }
 export const burn = async (id, erc20Address, tokens) => {
+  tokens = web3.utils.numberToHex(tokens * 1e18)
   const SimpleToken = new web3.eth.Contract(SimpleTokenBuild.abi, erc20Address)
 
   const accounts = await web3.eth.getAccounts()
