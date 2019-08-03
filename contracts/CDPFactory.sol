@@ -3,8 +3,20 @@ pragma solidity ^0.5.8;
 //collateralization ratio
 import "./SimpleToken.sol";
 import "./Oracle.sol";
-contract CDP {
+contract CDPFactory {
 	mapping (bytes32 => address) public contracts;
+	// cdpId = sha3(owner,assetid)
+	mapping (bytes32 => CDP) public cdps;
+	uint256 constant COLLATERAL_RATIO = 1;
+	uint256 numCDP = 0;
+	struct CDP {
+		bytes32 id;
+		bytes32 assetId;
+		address tokenAddress;
+		address owner;
+		uint256 collateral;
+		uint256 debt;
+	}
 
 	address public oracleAddress;
 	function constructory (address _oracleAddress) public {
@@ -18,7 +30,8 @@ contract CDP {
 	// 	oracle.request(id, url, selector);
 	// }
 
-	event Debug(uint256);
+	event DebugUint256(uint256);
+	event DebugBytes32(bytes32);
 	function mint(string memory url, string memory selector) public payable
 	//only oracle
 	{
@@ -28,7 +41,10 @@ contract CDP {
 		uint256 val = msg.value;
 		address sender = msg.sender;
 		uint256 price = oracle.read(id);
-		uint256 toMint = msg.value/price;
+		// price = assetprice/ethprice e.g. 2 barrol oil per eth
+		// token = eth * price
+		// eth = token/price
+		uint256 toMint = msg.value*price;
 		// emit Debug(toMint);
 		if (contracts[id] == 0x0000000000000000000000000000000000000000) {
 			SimpleToken _st = new SimpleToken();
@@ -37,7 +53,12 @@ contract CDP {
 		}
 		SimpleToken st = SimpleToken(contracts[id]);
 		// st.addMinter(msg.sender);
+		// require()
 		st.mint(sender, toMint);
+		bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
+		cdps[cdpid] = CDP(cdpid, id, address(st), msg.sender, val, toMint);
+		numCDP = numCDP + 1;
+		emit DebugBytes32(cdpid);
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
 
 
@@ -45,6 +66,9 @@ contract CDP {
 
 		function burn(bytes32 id, uint256 amount) public 	
 		{
+
+		bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
+		CDP storage cdp = cdps[cdpid];
 		Oracle oracle = Oracle(oracleAddress);
 
 		address sender = msg.sender;
@@ -52,13 +76,45 @@ contract CDP {
 		if(price==0) {
 			revert("price cannot be 0");
 		}
-		uint256 toReturn = amount*price;
+		uint256 toReturn = amount/price;
+		require(toReturn <= cdp.collateral);
 		// emit Debug(toReturn);
 		// emit Debug(toMint);
 
 		SimpleToken st = SimpleToken(contracts[id]);
+		cdp.collateral = 0;
 		st.burnFrom(sender, amount);
 		msg.sender.transfer(toReturn);
+		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
+		// how much eth to returnj? token = ethprice/assetprice * eth
+		// eth = token/price
+
+
+	}
+
+
+		function liquidate(bytes32 cdpId) public 	
+		{
+		Oracle oracle = Oracle(oracleAddress);
+
+		// address sender = msg.sender;
+		CDP storage cdp = cdps[cdpId];
+		emit DebugBytes32(cdp.assetId);
+		uint256 price = oracle.read(cdp.assetId);
+		if(price==0) {
+			revert("price cannot be 0");
+		}
+		uint256 amount = cdp.debt;
+		uint256 toReturn = amount/price;
+		address owner = cdp.owner;
+		// SimpleToken st = SimpleToken(contracts[cdp.assetId]);
+		if((toReturn/cdp.collateral)<COLLATERAL_RATIO) {
+			cdp.collateral = 0;
+			// st.burnFrom(owner, cdp.debt);
+		}
+		// emit Debug(toReturn);
+		// emit Debug(toMint);
+
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
 		// how much eth to returnj? token = ethprice/assetprice * eth
 		// eth = token/price
