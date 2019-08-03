@@ -1,3 +1,21 @@
 @import "overrides.scss";
 @import "bootstrap/bootstrap.scss";
 @import "dash.scss";
+
+.row-space-4 {
+  & + & {
+    margin-top: 1.5rem;
+  }
+
+  .col-md-6 + .col-md-6,
+  .col-md-6 + .col-md-5,
+  .col-md-8 + .col-md-4 {
+    @include media-breakpoint-down(sm) {
+      margin-top: 1.5rem;
+    }
+  }
+
+  .col-md-6:nth-child(n + 3) {
+    margin-top: 1.5rem;
+  }
+}

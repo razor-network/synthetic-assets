@@ -14,11 +14,11 @@ if (window.web3) {
 export const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['420'].address)
 export const EventBus = new Vue()
 export const request = async (url, selector) => {
-  const id = web3.utils.sha3(url + selector)
+  const id = web3.utils.soliditySha3(`${url},${selector}`)
 
   const accounts = await web3.eth.getAccounts()
 
-  const res = await Oracle.methods.request(id, url, selector).send({
+  const res = await Oracle.methods.request(url, selector).send({
     from: accounts[0]
   })
 
@@ -29,4 +29,18 @@ export const request = async (url, selector) => {
 }
 export const read = async (id) => {
   return Oracle.methods.read(id).call()
+}
+export const mint = async (url, selector, value) => {
+  const accounts = await web3.eth.getAccounts()
+  const _1e8 = new web3.utils.BN('1000000000000000000')
+  const wei = _1e8.mul(new web3.utils.BN(value))
+
+  const res = await Oracle.methods.mint(url, selector).send({
+    from: accounts[0],
+    value: wei
+  })
+
+  return {
+    tx: res.transactionHash
+  }
 }
