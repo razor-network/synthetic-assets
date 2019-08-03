@@ -43,7 +43,7 @@ contract('CDP', function (accounts) {
 
 
     })
- it('should be able to get', async function () {
+ it('should be able to read', async function () {
       // console.log(web3i.eth.accounts)
 
       let oracle = await Oracle.deployed()

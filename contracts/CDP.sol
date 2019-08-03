@@ -23,7 +23,7 @@ contract CDP {
 	// 	oracle.request(id, url, selector);
 	// }
 
-	event Debug(uint256);
+	// event Debug(uint256);
 	function mint(string memory url, string memory selector) public payable
 	//only oracle
 	{
@@ -40,9 +40,9 @@ contract CDP {
 			address ad = address(_st);
 			contracts[id] = ad;
 		}
-		// SimpleToken st = SimpleToken(contracts[id]);
+		SimpleToken st = SimpleToken(contracts[id]);
 		// st.addMinter(msg.sender);
-		// st.mint(sender, toMint);
+		st.mint(sender, toMint);
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
 
 

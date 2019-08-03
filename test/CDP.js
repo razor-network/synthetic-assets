@@ -4,7 +4,7 @@
 // const { assertRevert } = require('./helpers/assertRevert')
 let CDP = artifacts.require('./CDP.sol')
 let Oracle = artifacts.require('./Oracle.sol')
-// let SimpleToken = artifacts.require('./SimpleToken.sol')
+let SimpleToken = artifacts.require('./SimpleToken.sol')
 // let Random = artifacts.require('./lib/Random.sol')
 let Web3 = require('web3')
 // let merkle = require('@razor-network/merkle')
@@ -28,8 +28,12 @@ contract('CDP', function (accounts) {
       await oracle.request(url, selector)
       await oracle.fulfil(id, value)
       await cdp.mint(url, selector,  {value: eth, from: accounts[0]})
-      assert(1==2)
-    
+	  let address = await cdp.contracts(id)    
+	  console.log(address)
+	  assert(address != '0x0000000000000000000000000000000000000000')
+	  st = await SimpleToken.at(address)
+	  // console.log('st',st)
+	  console.log(Number(await st.balanceOf(accounts[0])))
     })
 
     it('should be able to get contract address', async function () {
