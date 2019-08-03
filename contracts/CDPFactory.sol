@@ -41,6 +41,7 @@ contract CDPFactory {
 		address sender = msg.sender;
 		uint256 price = oracle.read(id);
 		// price = assetprice/ethprice e.g. 2 barrol oil per eth
+		// price = asset/usd/eth/usd 1e18
 		// token = eth * price
 		// eth = token/price
 		uint256 toMint = msg.value*price;
@@ -88,7 +89,7 @@ contract CDPFactory {
 		// emit Debug(toMint);
 
 		SimpleToken st = SimpleToken(contracts[id]);
-		cdp.collateral = 0;
+		cdp.collateral = cdp.collateral - toReturn;
 		st.burnFrom(sender, amount);
 		msg.sender.transfer(toReturn);
 		// if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
