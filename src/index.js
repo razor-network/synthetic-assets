@@ -21,7 +21,7 @@ Oracle.events.Requested(async (err, event) => {
 
   console.log('VALUE', value)
 
-  const res = await Oracle.methods.fulfill(id, value).send({
+  const res = await Oracle.methods.fulfil(id, value).send({
     from: '0x384160b7b9Ab9A9025F6163e5E1B1f2d4914DCb9'
   })
 
