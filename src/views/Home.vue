@@ -94,15 +94,6 @@
       <div class="col-md-4">
         <div class="card">
           <div class="card-body">
-            <h4 class="mb-4">Liquidate</h4>
-
-            <button class="btn btn-block btn-primary" @click="liquidate">Liquidate</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
             <h4 class="mb-4">Burn</h4>
 
             <div class="mb-4">
@@ -111,6 +102,15 @@
             </div>
 
             <button class="btn btn-block btn-primary" @click="burn">Burn</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 overlay-disabled">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4">Liquidate</h4>
+
+            <button class="btn btn-block btn-primary" @click="liquidate">Liquidate</button>
           </div>
         </div>
       </div>
@@ -228,7 +228,8 @@ export default {
       this.erc20Address = await getContractAddress(this.assetId)
 
       this.cdpId = await cdpId(this.assetId)
-      this.ratio = ((new BN(this.collateral).multipliedBy(this.valueOnChainInEth)).dividedBy(this.debt)).toString()
+      const x = (new BN(this.collateral).multipliedBy(this.valueOnChainInEth)).dividedBy(this.debt)
+      this.ratio = new BN(1).dividedBy(x).toString()
     },
     mint: async function () {
       const { tx } = await mint(this.url, this.selector, this.eth)
@@ -258,5 +259,9 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
+}
+
+.overlay-disabled {
+  opacity: 0.5;
 }
 </style>
