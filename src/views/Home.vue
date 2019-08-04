@@ -12,6 +12,7 @@
         <div class="small text-muted short mt-1" @click="selector = demoSelector">Click to set {{demoSelector}}</div>
       </div>
     </div>
+
     <div class="row row-space-4" v-if="assetId">
       <div class="col-md-4">
         <label>Asset ID</label>
@@ -111,6 +112,14 @@
 
             <button class="btn btn-block btn-primary" @click="burn">Burn</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-space-4">
+      <div class="col-md-12">
+        <div class="p-4">
+          <img src="@/assets/img/hello.svg" class="img-fluid">
         </div>
       </div>
     </div>
