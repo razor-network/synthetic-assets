@@ -1,28 +1,17 @@
 <template>
   <div class="mb-5">
     <div class="row row-space-4">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <label>URL</label>
         <input class="form-control" v-model="url">
         <div class="small text-muted short mt-1" @click="url = demoUrl">Click to set {{demoUrl}}</div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <label>JSON Selector</label>
         <input class="form-control" v-model="selector">
         <div class="small text-muted short mt-1" @click="selector = demoSelector">Click to set {{demoSelector}}</div>
       </div>
-    </div>
-
-    <div class="row row-space-4" v-if="assetId">
-      <div class="col-md-4">
-        <label>Asset ID</label>
-        <input class="form-control" v-model="assetId" readonly>
-      </div>
-      <div class="col-md-4">
-        <label>CDP ID</label>
-        <input class="form-control" v-model="cdpId" readonly>
-      </div>
-      <div class="col-md-4">
+      <div class="col-md-4" v-if="assetId">
         <div>
           <label>Actions</label>
         </div>
@@ -32,10 +21,19 @@
         </div>
       </div>
     </div>
-    <div class="row row-space-4" v-if="erc20Address && erc20Address !== ZEROX">
-      <div class="col-md-6">
+
+    <div class="row row-space-4" v-if="assetId">
+      <div class="col-md-4">
+        <label>Asset ID</label>
+        <p class="lead hi">{{assetId}}</p>
+      </div>
+      <div class="col-md-4">
+        <label>CDP ID</label>
+        <p class="lead hi">{{cdpId}}</p>
+      </div>
+      <div class="col-md-4" v-if="erc20Address && erc20Address !== ZEROX">
         <label>ERC20 Contract Address</label>
-        <input class="form-control" v-model="erc20Address" readonly>
+        <p class="lead hi">{{erc20Address}}</p>
       </div>
     </div>
 
@@ -263,5 +261,10 @@ export default {
 
 .overlay-disabled {
   opacity: 0.5;
+}
+
+.hi {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
