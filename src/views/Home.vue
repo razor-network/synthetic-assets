@@ -95,7 +95,7 @@
           <div class="card-body">
             <h4 class="mb-4">Liquidate</h4>
 
-            <button class="btn btn-block btn-primary" @click="liquidate">Simulate &amp; Liquidate</button>
+            <button class="btn btn-block btn-primary" @click="liquidate">Liquidate</button>
           </div>
         </div>
       </div>
@@ -127,7 +127,7 @@ const ZEROX = '0x0000000000000000000000000000000000000000'
 const splitNum = (num) => {
   const str = String(num)
   const first = str.substring(0, str.indexOf('.') + 3)
-  const second = str.substring(str.indexOf('.') + 3).substring(0, 6)
+  const second = str.substring(str.indexOf('.') + 3).substring(0, 4)
 
   return {
     first,
