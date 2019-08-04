@@ -200,8 +200,6 @@ export default {
 
       const balance = await balanceOf(this.erc20Address)
 
-      console.log('balance', balance)
-
       this.userErc20Balance = balance / 1e18
     },
     updateCdpInfo: async function () {
@@ -230,20 +228,15 @@ export default {
 
       this.refresh()
     },
-    cdps: async function () {
-      const cdpResult = await cdps(this.assetId)
-      const balance = await balanceOf(cdpResult.tokenAddress)
+    burn: async function () {
+      await burn(this.assetId, this.erc20Address, this.tokens)
 
-      this.cdpResult = {
-        collateral: cdpResult.collateral / 1e18,
-        balance: (balance / 1e18) / 1e18
-      }
+      this.refresh()
     },
-    burn: function () {
-      return burn(this.assetId, this.erc20Address, this.tokens)
-    },
-    liquidate: function () {
-      return liquidate(this.cdpId)
+    liquidate: async function () {
+      await liquidate(this.cdpId)
+
+      this.refresh()
     }
   }
 }
