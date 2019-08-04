@@ -68,7 +68,7 @@
           <div class="card-body">
             <p class="lead">Collateral</p>
             <h4 class="m-0">
-              {{collateralString.first}}<small class="text-muted">{{collateralString.second}} <small>ETH ({{ratioString}}%)</small></small>
+              {{collateralString.first}}<small class="text-muted">{{collateralString.second}} <small>ETH <span v-if="ratioString">({{ratioString}}%)</span></small></small>
             </h4>
           </div>
         </div>
@@ -184,6 +184,7 @@ export default {
     },
     ratioString: function () {
       if (!this.ratio) return
+      if (isNaN(this.ratio)) return
 
       return Math.round(this.ratio * 10000, 4) / 100
     }
