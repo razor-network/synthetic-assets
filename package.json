@@ -50,7 +50,6 @@
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
     "standard": "^13.1.0",
-    "truffle": "^5.0.30",
     "vue-template-compiler": "^2.6.10"
   }
 }

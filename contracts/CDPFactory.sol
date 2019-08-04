@@ -117,8 +117,8 @@ contract CDPFactory {
 		// address owner = cdp.owner;
 		// SimpleToken st = SimpleToken(contracts[cdp.assetId]);
 		if((toReturn/cdp.collateral)<COLLATERAL_RATIO) {
-			cdp.collateral = 0;
 			msg.sender.transfer(cdp.collateral);
+			cdp.collateral = 0;
 			// st.burnFrom(owner, cdp.debt);
 		}
 		// emit Debug(toReturn);
