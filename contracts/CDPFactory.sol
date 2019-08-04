@@ -1,5 +1,5 @@
 pragma solidity ^0.5.8;
-// function to liquidate (optional) this	
+// function to liquidate (optional) this
 import "./SimpleToken.sol";
 import "./Oracle.sol";
 contract CDPFactory {
@@ -72,7 +72,7 @@ contract CDPFactory {
 
 	}
 
-		function burn(bytes32 id, uint256 amount) public 	
+		function burn(bytes32 id, uint256 amount) public
 		{
 		bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
 		CDP storage cdp = cdps[cdpid];
@@ -98,7 +98,7 @@ contract CDPFactory {
 		// eth = token/price
 	}
 
-		function liquidate(bytes32 cdpId) public 	
+		function liquidate(bytes32 cdpId) public
 		{
 		Oracle oracle = Oracle(oracleAddress);
 

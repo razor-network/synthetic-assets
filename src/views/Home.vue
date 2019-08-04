@@ -184,7 +184,7 @@ export default {
       await this.updateCdpInfo()
 
       this.cdpId = await cdpId(this.assetId)
-      this.ratio = (new BN(this.collateral).dividedBy(this.valueOnChainInEth)).toString()
+      this.ratio = ((new BN(this.collateral).multipliedBy(this.valueOnChainInEth)).dividedBy(this.debt)).toString()
     },
     mint: async function () {
       const { tx } = await mint(this.url, this.selector, this.eth)
@@ -221,3 +221,9 @@ export default {
   cursor: pointer;
 }
 </style>
+
+
+
+
+//collateral raio = value of collateral / valuie of Debt
+// = eth COllateral / (debtToken (token)* price)

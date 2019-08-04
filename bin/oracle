@@ -4,6 +4,7 @@ const _ = require('lodash')
 const axios = require('axios')
 const Web3 = require('web3')
 const KrakenClient = require('kraken-api')
+const BN = require('bignumber.js')
 
 const { FROM_ADDRESS } = process.env
 
@@ -15,8 +16,6 @@ let count = 0
 const kraken = new KrakenClient()
 const OracleBuild = require('../build/contracts/Oracle.json')
 const web3 = new Web3('ws://localhost:8545')
-
-const _1e18 = new web3.utils.BN('1000000000000000000')
 const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['420'].address)
 
 Oracle.events.Requested(async (err, event) => {
@@ -29,18 +28,16 @@ Oracle.events.Requested(async (err, event) => {
   console.log(`[${count}]`, '🙏🏻', '\t', url, '\t', selector)
 
   const response = await axios.get(url)
-  let value = _.get(response.data, selector)
+  const COM_USD = _.get(response.data, selector)
 
-  value = new web3.utils.BN(Math.floor(value))
+  const krakenRes = await kraken.api('Ticker', { pair: 'XETHZUSD' })
+  const ETH_USD = krakenRes.result.XETHZUSD.c[0]
 
-  let prr = await kraken.api('Ticker', { pair: 'XETHZUSD' })
-  prr = Math.floor(prr.result.XETHZUSD.c[0])
+  const COM_WEI = ((new BN(COM_USD)).times(1e18)).dividedToIntegerBy(ETH_USD)
+  // const COM_WEI = COM_ETH.times(1e18)
+  const COM_WEI_HEX = `0x${COM_WEI.toString(16)}`
 
-  prr = new web3.utils.BN(prr)
-  value = value.mul(_1e18)
-  value = value.div(prr)
-
-  console.log(`[${count}]`, '✍🏻', '\t', value.toString(), '\t', (await Oracle.methods.fulfil(id, web3.utils.numberToHex(value)).send({
+  console.log(`[${count}]`, '✍🏻', '\t', COM_WEI.toString(), '\t', (await Oracle.methods.fulfil(id, COM_WEI_HEX).send({
     from: FROM_ADDRESS
   })).transactionHash)
 
@@ -48,3 +45,8 @@ Oracle.events.Requested(async (err, event) => {
 })
 
 console.log('Watching for requests...')
+
+//
+// COM_USD
+// -------
+// ETH_USD
