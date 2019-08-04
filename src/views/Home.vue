@@ -13,21 +13,15 @@
       </div>
     </div>
     <div class="row row-space-4" v-if="assetId">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <label>Asset ID</label>
         <input class="form-control" v-model="assetId" readonly>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <label>CDP ID</label>
         <input class="form-control" v-model="cdpId" readonly>
       </div>
-    </div>
-    <div class="row row-space-4" v-if="erc20Address && erc20Address !== ZEROX">
-      <div class="col-md-6">
-        <label>ERC20 Contract Address</label>
-        <input class="form-control" v-model="erc20Address" readonly>
-      </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div>
           <label>Actions</label>
         </div>
@@ -35,6 +29,12 @@
           <button type="button" class="btn btn-secondary" @click="refresh">Refresh</button>
           <button type="button" class="btn btn-secondary" @click="request">Update Price</button>
         </div>
+      </div>
+    </div>
+    <div class="row row-space-4" v-if="erc20Address && erc20Address !== ZEROX">
+      <div class="col-md-6">
+        <label>ERC20 Contract Address</label>
+        <input class="form-control" v-model="erc20Address" readonly>
       </div>
     </div>
 
@@ -198,7 +198,11 @@ export default {
     updateUserBalance: async function () {
       if (!this.erc20Address || this.erc20Address === ZEROX) return
 
-      this.userErc20Balance = (await balanceOf(this.erc20Address)) / 1e18
+      const balance = await balanceOf(this.erc20Address)
+
+      console.log('balance', balance)
+
+      this.userErc20Balance = balance / 1e18
     },
     updateCdpInfo: async function () {
       const cdpResult = await cdps(this.assetId)
@@ -211,14 +215,10 @@ export default {
       this.refresh()
     },
     refresh: async function () {
-      this.erc20Address = await getContractAddress(this.assetId)
-
-      const valueOnChainInEth = await read(this.assetId)
-
-      this.valueOnChainInEth = valueOnChainInEth / 1e18
-
       await this.updateUserBalance()
       await this.updateCdpInfo()
+      this.valueOnChainInEth = await read(this.assetId) / 1e18
+      this.erc20Address = await getContractAddress(this.assetId)
 
       this.cdpId = await cdpId(this.assetId)
       this.ratio = ((new BN(this.collateral).multipliedBy(this.valueOnChainInEth)).dividedBy(this.debt)).toString()
