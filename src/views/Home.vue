@@ -21,20 +21,6 @@
         <label>CDP ID</label>
         <input class="form-control" v-model="cdpId" readonly>
       </div>
-      <div class="col-md-6">
-        <label>Collateral Ratio</label>
-        <input class="form-control" v-model="ratio" readonly>
-      </div>
-      <div class="col-md-6">
-        <label>Asset Value in ETH on-chain</label>
-        <div class="input-group m-0">
-          <input class="form-control" v-model="valueOnChainInEth" readonly>
-          <div class="input-group-append">
-            <button class="btn btn-outline-primary" type="button" @click="request">Update</button>
-            <button class="btn btn-outline-primary" type="button" @click="read">Read</button>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="row row-space-4" v-if="erc20Address && erc20Address !== ZEROX">
       <div class="col-md-6">
@@ -42,34 +28,48 @@
         <input class="form-control" v-model="erc20Address" readonly>
       </div>
       <div class="col-md-6">
-        <label>Your blance</label>
-
-        <div class="input-group m-0">
-          <input class="form-control" v-model="userErc20Balance" readonly>
-          <div class="input-group-append">
-            <button class="btn btn-outline-primary" type="button" @click="updateUserBalance">Refresh</button>
-          </div>
+        <div>
+          <label>Actions</label>
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-secondary" @click="refresh">Refresh</button>
+          <button type="button" class="btn btn-secondary" @click="request">Update Price</button>
         </div>
       </div>
     </div>
-    <div class="row row-space-4" v-if="erc20Address && erc20Address !== ZEROX">
-      <div class="col-md-6">
-        <label>Collateral</label>
 
-        <div class="input-group m-0">
-          <input class="form-control" v-model="collateral" readonly>
-          <div class="input-group-append">
-            <button class="btn btn-outline-primary" type="button" @click="updateCdpInfo">Refresh</button>
+    <div class="row row-space-4">
+      <div class="col-md-3" v-if="valueOnChainInEthString">
+        <div class="card">
+          <div class="card-body">
+            <p class="lead">Asset Value</p>
+            <h4 class="m-0">{{valueOnChainInEthString.first}}<small class="text-muted">{{valueOnChainInEthString.second}} <small>ETH</small></small></h4>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <label>Debt</label>
-
-        <div class="input-group m-0">
-          <input class="form-control" v-model="debt" readonly>
-          <div class="input-group-append">
-            <button class="btn btn-outline-primary" type="button" @click="updateCdpInfo">Refresh</button>
+      <div class="col-md-3" v-if="userErc20BalanceString">
+        <div class="card">
+          <div class="card-body">
+            <p class="lead">Your Balance</p>
+            <h4 class="m-0">{{userErc20BalanceString.first}}<small class="text-muted">{{userErc20BalanceString.second}} <small>TOKENS</small></small></h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3" v-if="debtString">
+        <div class="card">
+          <div class="card-body">
+            <p class="lead">Debt</p>
+            <h4 class="m-0">{{debtString.first}}<small class="text-muted">{{debtString.second}} <small>TOKENS</small></small></h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3" v-if="collateralString">
+        <div class="card">
+          <div class="card-body">
+            <p class="lead">Collateral</p>
+            <h4 class="m-0">
+              {{collateralString.first}}<small class="text-muted">{{collateralString.second}} <small>ETH ({{ratioString}}%)</small></small>
+            </h4>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@
           <div class="card-body">
             <h4 class="mb-4">Liquidate</h4>
 
-            <button disabled class="btn btn-block btn-primary" @click="liquidate">Liquidate</button>
+            <button class="btn btn-block btn-primary" @click="liquidate">Simulate &amp; Liquidate</button>
           </div>
         </div>
       </div>
@@ -124,6 +124,17 @@ import { request, read, mint, cdps, balanceOf, burn, getContractAddress, cdpId, 
 
 const ZEROX = '0x0000000000000000000000000000000000000000'
 
+const splitNum = (num) => {
+  const str = String(num)
+  const first = str.substring(0, str.indexOf('.') + 3)
+  const second = str.substring(str.indexOf('.') + 3).substring(0, 6)
+
+  return {
+    first,
+    second
+  }
+}
+
 export default {
   data: function () {
     return {
@@ -150,11 +161,36 @@ export default {
     assetId: function () {
       if (!(this.url && this.selector)) return
       return Web3.utils.soliditySha3(this.url, this.selector)
+    },
+    debtString: function () {
+      if (!this.debt) return
+
+      return splitNum(this.debt)
+    },
+    userErc20BalanceString: function () {
+      if (!this.userErc20Balance) return
+
+      return splitNum(this.userErc20Balance)
+    },
+    valueOnChainInEthString: function () {
+      if (!this.valueOnChainInEth) return
+
+      return splitNum(this.valueOnChainInEth)
+    },
+    collateralString: function () {
+      if (!this.collateral) return
+
+      return splitNum(this.collateral)
+    },
+    ratioString: function () {
+      if (!this.ratio) return
+
+      return Math.round(this.ratio * 10000, 4) / 100
     }
   },
   watch: {
     assetId: async function (newValue) {
-      this.read()
+      this.refresh()
     }
   },
   methods: {
@@ -171,9 +207,9 @@ export default {
     },
     request: async function () {
       await request(this.url, this.selector)
-      this.read()
+      this.refresh()
     },
-    read: async function () {
+    refresh: async function () {
       this.erc20Address = await getContractAddress(this.assetId)
 
       const valueOnChainInEth = await read(this.assetId)
@@ -191,7 +227,7 @@ export default {
 
       this.tx = tx
 
-      this.read()
+      this.refresh()
     },
     cdps: async function () {
       const cdpResult = await cdps(this.assetId)
@@ -221,9 +257,3 @@ export default {
   cursor: pointer;
 }
 </style>
-
-
-
-
-//collateral raio = value of collateral / valuie of Debt
-// = eth COllateral / (debtToken (token)* price)
