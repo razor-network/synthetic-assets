@@ -3,7 +3,8 @@
     <div class="top-bar">
       <div class="container d-flex">
         <div class="brand">
-          <strong>Razor Synthetic Assets</strong>
+          <img src="@/assets/img/logo.svg" height="26px">
+          <strong>Synthetic Assets</strong>
         </div>
       </div>
     </div>
