@@ -10,6 +10,7 @@ let fs = require('fs').promises
 
 // const { FROM_ADDRESS, ETH_PRICE } = process.env
 let FROM_ADDRESS
+let ETH_PRICE
 // if (!FROM_ADDRESS) {
 //   throw new Error('Set FROM_ADDRESS=0x...')
 // }
@@ -17,8 +18,10 @@ let FROM_ADDRESS
 let count = 0
 const kraken = new KrakenClient()
 const OracleBuild = require('../build/contracts/Oracle.json')
-const web3 = new Web3('ws://rinkeby.infura.io/v3/26056f03e83343f5bbd280bafaa52684')
-const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['4'].address)
+const web3 = new Web3('wss://rinkeby.infura.io/ws/v3/26056f03e83343f5bbd280bafaa52684')
+const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['4'].address, {transactionConfirmationBlocks: 1,
+    defaultGas: 500000,
+    defaultGasPrice: 2000000000})
 
 async function login () {
   await web3.eth.accounts.wallet.create(0, randomHex(32))
@@ -38,6 +41,7 @@ async function login () {
 
 Oracle.events.Requested(async (err, event) => {
   if (err) {
+      console.error(err)
     return
   }
   // await login()
@@ -49,19 +53,20 @@ Oracle.events.Requested(async (err, event) => {
   const COM_USD = _.get(response.data, selector)
 
   let ETH_USD
-
-  if (ETH_PRICE) {
-    ETH_USD = ETH_PRICE
-  } else {
-    const krakenRes = await kraken.api('Ticker', { pair: 'XETHZUSD' })
+  //
+  // if (ETH_PRICE) {
+  //   ETH_USD = ETH_PRICE
+  // } else {
+    let krakenRes = await kraken.api('Ticker', { pair: 'XETHZUSD' })
     ETH_USD = krakenRes.result.XETHZUSD.c[0]
-  }
+  // }
 
   const COM_WEI = ((new BN(COM_USD)).times(1e18)).dividedToIntegerBy(ETH_USD)
   const COM_WEI_HEX = `0x${COM_WEI.toString(16)}`
 
   console.log(`[${count}]`, '✍🏻', '\t', COM_WEI.toString(), '\t', (await Oracle.methods.fulfil(id, COM_WEI_HEX).send({
-    from: FROM_ADDRESS
+    from: FROM_ADDRESS,
+    gas:200000
   })).transactionHash)
 
   console.log(`[${count}]`, '🔏', '\t', await Oracle.methods.read(id).call())
