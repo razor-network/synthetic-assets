@@ -5,6 +5,8 @@ const axios = require('axios')
 const Web3 = require('web3')
 const KrakenClient = require('kraken-api')
 const BN = require('bignumber.js')
+let { randomHex } = require('web3-utils')
+let fs = require('fs').promises
 
 // const { FROM_ADDRESS, ETH_PRICE } = process.env
 let FROM_ADDRESS
@@ -15,19 +17,22 @@ let FROM_ADDRESS
 let count = 0
 const kraken = new KrakenClient()
 const OracleBuild = require('../build/contracts/Oracle.json')
-const web3 = new Web3('http://rinkeby.infura.io/v3/26056f03e83343f5bbd280bafaa52684')
+const web3 = new Web3('ws://rinkeby.infura.io/v3/26056f03e83343f5bbd280bafaa52684')
 const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['4'].address)
 
 async function login () {
   await web3.eth.accounts.wallet.create(0, randomHex(32))
-  let pk = await fs.readFile('../pk')
+  let pk = await fs.readFile('pk')
+  // console.log(pk)
   // let keystoreArray = JSON.parse(rawdata)
   // let wall = await web3.eth.accounts.wallet.decrypt([keystoreArray], password)
   // let pk = wall.accounts[0].privateKey
-  let account = await web3.eth.accounts.privateKeyToAccount(pk)
-  await web3.eth.accounts.wallet.add(account)
-  FROM_ADDRESS = await web3.eth.accounts.wallet.accounts[0].address
-  console.log(from, ' unlocked')
+  // let account = await web3.eth.accounts.privateKeyToAccount(pk)
+  // console.log(account)
+  web3.eth.accounts.wallet.add(String(pk))
+  // console.log(web3.eth.accounts.wallet['0'].address)
+  FROM_ADDRESS = await web3.eth.accounts.wallet['0'].address
+  console.log(FROM_ADDRESS, ' unlocked')
   // return (from)
 }
 
@@ -35,7 +40,7 @@ Oracle.events.Requested(async (err, event) => {
   if (err) {
     return
   }
-  await login()
+  // await login()
   count++
   const { id, url, selector } = event.returnValues
   console.log(`[${count}]`, '🙏🏻', '\t', url, '\t', selector)
@@ -61,7 +66,7 @@ Oracle.events.Requested(async (err, event) => {
 
   console.log(`[${count}]`, '🔏', '\t', await Oracle.methods.read(id).call())
 })
-
+login()
 console.log('Watching for requests...')
 
 //

@@ -15,8 +15,8 @@ if (window.web3) {
 }
 
 const _1e18 = new web3.utils.BN('1000000000000000000')
-export const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['420'].address)
-export const CDPFactory = new web3.eth.Contract(CDPFactoryBuild.abi, CDPFactoryBuild.networks['420'].address)
+export const Oracle = new web3.eth.Contract(OracleBuild.abi, OracleBuild.networks['4'].address)
+export const CDPFactory = new web3.eth.Contract(CDPFactoryBuild.abi, CDPFactoryBuild.networks['4'].address)
 
 export const EventBus = new Vue()
 export const request = async (url, selector) => {
