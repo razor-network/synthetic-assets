@@ -8,18 +8,34 @@ import CDPFactoryBuild from '../../build/contracts/CDPFactory.json'
 import SimpleTokenBuild from '../../build/contracts/SimpleToken.json'
 
 let web3
+let accounts
 
-if (window.web3) {
-  web3 = new Web3(window.web3.currentProvider)
-} else {
-  web3 = new Web3('ws://localhost:8545')
+let networkId = 4
+
+// let error
+// let ethereum
+
+let _1e18
+let Oracle
+let CDPFactory
+export const enableEth = async () => {
+  if (typeof window.ethereum === 'undefined'
+    || typeof window.web3 === 'undefined') {
+    alert('Browser does not support ethereum. Consider installing metamask!')
+    return false
+  } else {
+    // In the case the user has MetaMask installed, you can easily
+    // ask them to sign in and reveal their accounts:
+    accounts = await window.ethereum.enable()
+    web3 = new Web3(window.web3.currentProvider)
+
+    _1e18 = new web3.utils.BN('1000000000000000000')
+    Oracle = new web3.eth.Contract(JobManagerBuild.abi, DelegatorBuild.networks[networkId].address)
+    CDPFactory = new web3.eth.Contract(CDPFactoryBuild.abi, CDPFactoryBuild.networks[networkId].address)
+
+    return true
+  }
 }
-
-let networkId = '4'
-
-const _1e18 = new web3.utils.BN('1000000000000000000')
-export const Oracle = new web3.eth.Contract(JobManagerBuild.abi, DelegatorBuild.networks[networkId].address)
-export const CDPFactory = new web3.eth.Contract(CDPFactoryBuild.abi, CDPFactoryBuild.networks[networkId].address)
 
 export const EventBus = new Vue()
 // export const request = async (jobId) => {

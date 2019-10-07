@@ -128,7 +128,7 @@
 <script>
 // import Web3 from 'web3'
 import BN from 'bignumber.js'
-import { read, mint, cdps, balanceOf, burn, getContractAddress, cdpId, getAssetId, liquidate } from '@/utils/commons'
+import { enableEth, read, mint, cdps, balanceOf, burn, getContractAddress, cdpId, getAssetId, liquidate } from '@/utils/commons'
 
 const ZEROX = '0x0000000000000000000000000000000000000000'
 
@@ -201,6 +201,7 @@ export default {
     }
   },
   mounted () {
+    enableEth()
     this.getJobs()
   },
   methods: {
