@@ -104,19 +104,19 @@ export const balanceOf = async (erc20Address) => {
 
   const value = await SimpleToken.methods.balanceOf(accounts[0]).call()
 
-  return value / 1e18
+  return value
 }
 export const burn = async (jobId, erc20Address) => {
-  let tokens = new BN('1')
-  tokens = tokens.times(100e18)
-  // console.log('burning', tokens)
-  tokens = tokens.toString(16)
+  // let tokens = await balanceOf
+  const accounts = await web3.eth.getAccounts()
+  console.log('current account', accounts[0])
+  let tokens = await balanceOf(erc20Address)
+  console.log('burning', tokens)
+  tokens = tokens.toString()
 
   const SimpleToken = new web3.eth.Contract(SimpleTokenBuild.abi, erc20Address)
 
-  const accounts = await web3.eth.getAccounts()
-
-  await SimpleToken.methods.approve(CDPFactoryBuild.networks[networkId].address, `0x${tokens}`).send({
+  await SimpleToken.methods.approve(CDPFactoryBuild.networks[networkId].address, tokens).send({
     from: accounts[0]
   })
 

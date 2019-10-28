@@ -219,20 +219,20 @@ export default {
       if (!this.erc20Address || this.erc20Address === ZEROX) return
 
       const balance = await balanceOf(this.erc20Address)
+      // console.log('lol balance is ', balance)
 
       this.userErc20Balance = balance / 1e18
     },
     updateCdpInfo: async function () {
       const cdpResult = await cdps(this.assetId)
       this.collateral = cdpResult.collateral / 1e18
-      this.debt = (cdpResult.debt / 1e18) / 1e18
+      this.debt = (cdpResult.debt / 1e18)
     },
     // request: async function () {
     //   await request(this.url, this.selector)
     //   this.refresh()
     // },
     refresh: async function () {
-      await this.updateUserBalance()
       this.assetId = await getAssetId(this.selected)
       console.log('this.assetId', this.assetId)
       await this.updateCdpInfo()
@@ -244,8 +244,9 @@ export default {
       this.erc20Address = await getContractAddress(this.assetId)
       //
       this.cdpId = await cdpId(this.assetId)
-      const x = (new BN(this.collateral).multipliedBy(this.valueOnChainInEth)).dividedBy(this.debt)
-      this.ratio = new BN(1).dividedBy(x).toString()
+      const x = (new BN(this.debt).multipliedBy(this.valueOnChainInEth)).dividedBy(this.collateral)
+      this.ratio = 1 / x
+      await this.updateUserBalance()
     },
     mint: async function () {
       const { tx } = await mint(this.selected, this.eth)

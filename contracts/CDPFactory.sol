@@ -60,7 +60,7 @@ contract CDPFactory {
         // he should get 1 appl for 50 eth
 
         // toMint = (2*220/174*5)
-        uint256 toMint = (eth*ethPrice*18)/(result*COLLATERAL_RATIO);
+        uint256 toMint = (eth*ethPrice)/(result*COLLATERAL_RATIO);
         // uint256 tokenPerEth = (ethPrice)/(result*COLLATERAL_RATIO);
         if (toMint == 0) revert("toMint is 0");
         // emit Debug(toMint);
