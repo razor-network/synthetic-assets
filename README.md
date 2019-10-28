@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/cca2e971-15f5-4463-851b-6a02ddfebc02/deploy-status)](https://app.netlify.com/sites/synth-razor/deploys)
 npm install @openzeppelin/contracts
 npm i
 ganache-cli -i 420
