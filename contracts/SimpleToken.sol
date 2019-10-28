@@ -18,7 +18,7 @@ contract SimpleToken is ERC20, ERC20Detailed, ERC20Mintable, ERC20Burnable {
     /**
      * @dev Constructor that gives msg.sender all of existing tokens.
      */
-    constructor () public ERC20Detailed("TestCoin", "TST", DECIMALS) {
+    constructor () public ERC20Detailed("TestCoin", "RSA", DECIMALS) {
         // _mint(msg.sender, INITIAL_SUPPLY);
     }
 }

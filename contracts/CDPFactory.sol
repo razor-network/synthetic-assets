@@ -8,7 +8,7 @@ contract CDPFactory {
     mapping (bytes32 => address) public contracts;
     // cdpId = sha3(owner,assetid)
     mapping (bytes32 => CDP) public cdps;
-    uint256 constant COLLATERAL_RATIO = 1;
+    uint256 constant COLLATERAL_RATIO = 5;
     uint256 numCDP = 0;
 
     struct CDP {
@@ -51,6 +51,7 @@ contract CDPFactory {
 
         // uint256 price = (result)/ethPrice;
         require(ethPrice != 0,"Eth Price cannot be zero");
+        require(result != 0,"Asset price cannot be zero");
         // if aapl = $1000
         //if eth = $100
         //then price = 10 eth / apple
@@ -59,7 +60,7 @@ contract CDPFactory {
         // he should get 1 appl for 50 eth
 
         // toMint = (2*220/174*5)
-        uint256 toMint = (eth*ethPrice)/(result*COLLATERAL_RATIO);
+        uint256 toMint = (eth*ethPrice*18)/(result*COLLATERAL_RATIO);
         // uint256 tokenPerEth = (ethPrice)/(result*COLLATERAL_RATIO);
         if (toMint == 0) revert("toMint is 0");
         // emit Debug(toMint);

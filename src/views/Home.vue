@@ -136,7 +136,7 @@ const ZEROX = '0x0000000000000000000000000000000000000000'
 const splitNum = (num) => {
   const str = String(num)
   const first = str.substring(0, str.indexOf('.') + 3)
-  const second = str.substring(str.indexOf('.') + 3).substring(0, 4)
+  const second = str.substring(str.indexOf('.') + 3).substring(0, 8)
 
   return {
     first,
@@ -150,8 +150,8 @@ export default {
       jobs: [],
       selected: null,
       assetId: null,
-      demoUrl: 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=AAPL&apikey=E1BN9Y09VQ32BQ00',
-      demoSelector: 'Global Quote["05. price"]',
+      // demoUrl: 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=AAPL&apikey=E1BN9Y09VQ32BQ00',
+      // demoSelector: 'Global Quote["05. price"]',
       id: null,
       valueOnChainInEth: null,
       eth: null,
@@ -236,9 +236,9 @@ export default {
       this.assetId = await getAssetId(this.selected)
       console.log('this.assetId', this.assetId)
       await this.updateCdpInfo()
-      let res = await read(this.selected) / 100
+      let res = await read(this.selected) / 100000000
       console.log(res)
-      let ethPrice = await read(1) / 100
+      let ethPrice = await read(1) / 100000000
       this.valueOnChainInEth = res / ethPrice
 
       this.erc20Address = await getContractAddress(this.assetId)
