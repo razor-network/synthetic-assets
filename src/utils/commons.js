@@ -10,7 +10,7 @@ import SimpleTokenBuild from '../../build/contracts/SimpleToken.json'
 let web3
 let accounts
 
-let networkId = 4
+let networkId = 5
 
 // let error
 // let ethereum

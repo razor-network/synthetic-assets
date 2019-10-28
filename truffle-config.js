@@ -65,7 +65,20 @@ module.exports = {
       timeoutBlocks: 200,
       from: '0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA',
       skipDryRun: true // Skip dry run before migrations? (default: false for public nets )
-    }
+    },
+    goerli: {
+      provider: function () {
+        return new HDWalletProvider(mnemonic, 'https://goerli.infura.io/v3/26056f03e83343f5bbd280bafaa52684')
+      },
+      // provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/`), // `${infuraKey}`),
+      network_id: 5,
+      // gas: 5500000,
+      confirmations: 0,
+      timeoutBlocks: 200,
+      from: '0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA',
+      skipDryRun: true // Skip dry run before migrations? (default: false for public nets )
+    },
+
     // Another network with more advanced options...
     // advanced: {
     //   port: 8777,             // Custom port

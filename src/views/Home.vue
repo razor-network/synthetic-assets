@@ -5,6 +5,7 @@
         <div class="col-xl-3 col-lg-6 mb-4">
           <div class="row">
             <h1 >Datafeed</h1>
+            <p> Note: Please select Göerli testnet in metamask. </p>
             <select v-model="selected" @change="refresh()" class="form-control">
               <option disabled selected :value="null">Select a datafeed</option>
               <option v-for="job in jobs" :value="job.id" :key="job.id">{{ job.url }}</option>

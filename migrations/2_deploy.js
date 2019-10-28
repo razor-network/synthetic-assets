@@ -7,5 +7,6 @@ module.exports = async function (deployer) {
   // deployer.deploy(Oracle).then(async function (oracle) {
   await deployer.deploy(CDPFactory)
   let cdp = await CDPFactory.deployed()
-  await cdp.init('0x73f1F92d27549be686AF027679186739dA82B691')
+
+  await cdp.init('0x27EC9369Cbb43D5EB10A8236dEC2Ea5e5718323e')
 }
