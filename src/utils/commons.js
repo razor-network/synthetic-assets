@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Web3 from 'web3'
-import BN from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 
 import JobManagerBuild from '../../build/contracts/JobManager.json'
 import DelegatorBuild from '../../build/contracts/Delegator.json'
@@ -15,7 +15,7 @@ let networkId = 5
 // let error
 // let ethereum
 
-let _1e18
+let _1e18 = new BigNumber('1000000000000000000')
 let Oracle
 let CDPFactory
 export const enableEth = async () => {
@@ -29,7 +29,7 @@ export const enableEth = async () => {
     accounts = await window.ethereum.enable()
     web3 = new Web3(window.web3.currentProvider)
 
-    _1e18 = new web3.utils.BN('1000000000000000000')
+    // _1e18 = new web3.utils.BN('1000000000000000000')
     Oracle = new web3.eth.Contract(JobManagerBuild.abi, DelegatorBuild.networks[networkId].address)
     CDPFactory = new web3.eth.Contract(CDPFactoryBuild.abi, CDPFactoryBuild.networks[networkId].address)
 
@@ -55,19 +55,7 @@ export const getContractAddress = (assetId) => {
 export const read = async (id) => {
   return Oracle.methods.getResult(id).call()
 }
-export const mint = async (jobId, value) => {
-  value = new web3.utils.BN(value)
-  value = _1e18.mul(value)
-  const accounts = await web3.eth.getAccounts()
 
-  const res = await CDPFactory.methods.mint(jobId).send({
-    from: accounts[0],
-  value})
-
-  return {
-    tx: res.transactionHash
-  }
-}
 export const cdpId = async (id) => {
   const accounts = await web3.eth.getAccounts()
   return web3.utils.soliditySha3(accounts[0], id)
@@ -105,6 +93,65 @@ export const balanceOf = async (erc20Address) => {
   const value = await SimpleToken.methods.balanceOf(accounts[0]).call()
 
   return value
+}
+
+export const mint = async (jobId, value) => {
+  value = new BigNumber(value).times(_1e18)
+  value = value.toFixed()
+  console.log('valllllue', value)
+  // value = new web3.utils.BN(value)
+
+  // value = _1e18.mul(value)
+  const accounts = await web3.eth.getAccounts()
+
+  const res = await CDPFactory.methods.mint(jobId).send({
+    from: accounts[0],
+  value})
+
+  return {
+    tx: res.transactionHash
+  }
+}
+
+export const draw = async (jobId, value) => {
+  // amount = String(Number(amount) * 1000000000000000000)
+  console.log('valllllue', value)
+  value = new BigNumber(value).times(_1e18)
+  console.log('valllllue', value)
+  value = value.toFixed()
+  console.log('valllllue', value)
+  // value = new web3.utils.BN(value)
+  // console.log('valllllue', value)
+  // console.log('amount', amount)
+  // amount = new web3.utils.BN(amount)
+
+  // value = _1e18.mul(value)
+  const accounts = await web3.eth.getAccounts()
+
+  const res = await CDPFactory.methods.draw(jobId, value).send({
+  from: accounts[0]})
+
+  return {
+    tx: res.transactionHash
+  }
+}
+
+export const collateralize = async (jobId, value) => {
+  value = new BigNumber(value).times(_1e18)
+  value = value.toFixed()
+  console.log('valllllue', value)
+  value = new web3.utils.BN(value)
+
+  // value = _1e18.mul(value)
+  const accounts = await web3.eth.getAccounts()
+
+  const res = await CDPFactory.methods.increaseCollateral(jobId).send({
+    from: accounts[0],
+  value})
+
+  return {
+    tx: res.transactionHash
+  }
 }
 export const burn = async (jobId, erc20Address) => {
   // let tokens = await balanceOf

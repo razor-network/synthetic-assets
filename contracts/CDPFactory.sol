@@ -6,9 +6,9 @@ import "../../contracts/contracts/Delegator.sol";
 
 contract CDPFactory {
     mapping (bytes32 => address) public contracts;
-    // cdpId = sha3(owner,assetid)
     mapping (bytes32 => CDP) public cdps;
-    uint256 constant COLLATERAL_RATIO = 5;
+    uint256 constant COLLATERAL_RATIO = 500;
+    uint256 constant MIN_COLLATERAL_RATIO = 200;
     uint256 numCDP = 0;
 
     struct CDP {
@@ -19,29 +19,25 @@ contract CDPFactory {
         uint256 collateral;
         uint256 debt;
         uint256 jobId;
-        // uint256 tokenPerEth;
     }
 
     address public oracleAddress;
     Delegator delegator;
-    function init (address _oracleAddress) public {
-        oracleAddress = _oracleAddress;
-        delegator = Delegator(oracleAddress);
-    }
-    // function createRequest(string memory url, string memory selector) public {
-    // 	Oracle oracle = Oracle(oracleAddress);
-    // 	bytes32 id = keccak256(abi.encode(url, selector));
-    // 	oracle.request(id, url, selector);
-    // }
+    bool initialized = false;
 
     event DebugUint256(uint256);
 
     event DebugBytes32(bytes32);
 
-    function mint(uint256 jobId) public payable
-    //only oracle
-    {
+    function init (address _oracleAddress) public {
+        require(!initialized);
+        initialized = true;
+        oracleAddress = _oracleAddress;
+        delegator = Delegator(oracleAddress);
+    }
 
+    function mint(uint256 jobId) public payable
+    {
         uint256 eth = msg.value;
         address sender = msg.sender;
         // (string memory url, string memory selector, bool repeat, uint256 result) = delegator.getJob(jobId);
@@ -52,15 +48,7 @@ contract CDPFactory {
         // uint256 price = (result)/ethPrice;
         require(ethPrice != 0,"Eth Price cannot be zero");
         require(result != 0,"Asset price cannot be zero");
-        // if aapl = $1000
-        //if eth = $100
-        //then price = 10 eth / apple
-        // so 10 eth gives you 1 aapl
-        //if collateral ratio = 500%
-        // he should get 1 appl for 50 eth
-
-        // toMint = (2*220/174*5)
-        uint256 toMint = (eth*ethPrice)/(result*COLLATERAL_RATIO);
+        uint256 toMint = (eth*ethPrice*100)/(result*COLLATERAL_RATIO);
         // uint256 tokenPerEth = (ethPrice)/(result*COLLATERAL_RATIO);
         if (toMint == 0) revert("toMint is 0");
         // emit Debug(toMint);
@@ -84,45 +72,52 @@ contract CDPFactory {
 
     }
 
-    function increaseCollateral(uint256 jobId) public payable {
+    function draw(uint256 jobId, uint256 amount) public
+    {
+        if (amount == 0) revert("amount is 0");
         address sender = msg.sender;
-        (string memory url, string memory selector, , uint256 result) = delegator.getJob(jobId);
+        (string memory url, string memory selector, , uint256 price) = delegator.getJob(jobId);
         bytes32 id = keccak256(abi.encodePacked(url, selector));
         bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
         CDP storage cdp = cdps[cdpid];
+        if(cdp.collateral == 0) revert('CDP has 0 collateral');
+        (, , , uint256 ethPrice) = delegator.getJob(1);
+
+        require(ethPrice != 0,"Eth Price cannot be zero");
+        require(price != 0,"Asset price cannot be zero");
+        //WARNING Overflow protection missing
+        cdp.debt = cdp.debt + amount;
+        // assert(cdp.debt > 0);
+        uint256 collateralRatio  = (cdp.collateral * ethPrice * 100)/(price * cdp.debt);
+        if(collateralRatio < MIN_COLLATERAL_RATIO) revert("Collateral ratio below minimum");
+
+        SimpleToken st = SimpleToken(contracts[id]);
+        st.mint(sender, amount);
+    }
+
+    function increaseCollateral(uint256 jobId) public payable {
+        (string memory url, string memory selector, , uint256 result) = delegator.getJob(jobId);
+        require(result > 0, "Result cannot be zero");
+        bytes32 id = keccak256(abi.encodePacked(url, selector));
+        bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
+        CDP storage cdp = cdps[cdpid];
+        require(cdp.collateral > 0, "Existing collateral cannot be zero");
         cdp.collateral = cdp.collateral + msg.value;
     }
 
     function burn(uint256 jobId) public
     {
-
         address sender = msg.sender;
         (string memory url, string memory selector, , uint256 result) = delegator.getJob(jobId);
         bytes32 id = keccak256(abi.encodePacked(url, selector));
         bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
         CDP storage cdp = cdps[cdpid];
-        // assert(cdpid!=)
-        //
-        (, , , uint256 ethPrice) = delegator.getJob(1);
-        //
-        // uint256 price = (result)/ethPrice;
-        require(ethPrice != 0,"Eth Price cannot be zero");
-        //
-        // uint256 toMint = (eth*ethPrice)/(result*COLLATERAL_RATIO);
-        // //eth = tokens*price*collateralRatio/ethPrice
-        // uint256 toReturn = amount/cdp.tokenPerEth;
-        // // require(toReturn <= cdp.collateral/COLLATERAL_RATIO);
-        // // emit Debug(toReturn);
-        // // emit Debug(toMint);
-        //
+
         SimpleToken st = SimpleToken(contracts[id]);
         st.burnFrom(sender, cdp.debt);
         msg.sender.transfer(cdp.collateral);
         cdp.collateral =  0; //cdp.collateral - toReturn;
         cdp.debt = 0; //cdp.debt - amount;
-        // if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
-        // how much eth to returnj? token = ethprice/assetprice * eth
-        // eth = token/price
     }
 
     function liquidate(bytes32 cdpId) public {
@@ -131,29 +126,25 @@ contract CDPFactory {
         CDP storage cdp = cdps[cdpId];
         emit DebugBytes32(cdp.assetId);
         uint256 price = delegator.getResult(cdp.jobId);
-        if (price == 0) {
-            revert("price cannot be 0");
-        }
-        uint256 amount = cdp.debt;
-        uint256 toReturn = amount/price;
-        emit DebugUint256(amount);
-        emit DebugUint256(price);
-        emit DebugUint256(toReturn);
-        // address owner = cdp.owner;
-        // SimpleToken st = SimpleToken(contracts[cdp.assetId]);
-        if ((toReturn/cdp.collateral) < COLLATERAL_RATIO) {
+        (, , , uint256 ethPrice) = delegator.getJob(1);
+
+        require(ethPrice != 0,"Eth Price cannot be zero");
+        require(price != 0,"Asset price cannot be zero");
+
+
+        // priceInEth = price/ethPrice
+        // debt value = debt *price in eth
+        // cr = collateral value / debt value
+        //  = collateral value / (debt *price in eth)
+        //  = (collateral value / priceInEth*debt)
+        //  = (collateral value / (price/ethPrice) *debt)
+        // = (collateral value*ethPrice / price *debt)
+        uint256 collateralRatio  = (cdp.collateral * ethPrice * 100)/(price * cdp.debt);
+
+        if ((collateralRatio) < MIN_COLLATERAL_RATIO) {
             msg.sender.transfer(cdp.collateral);
             cdp.collateral = 0;
-    // st.burnFrom(owner, cdp.debt);
+            cdp.debt = 0;
         }
-    // emit Debug(toReturn);
-    // emit Debug(toMint);
-
-    // if oil price is 100 and eth is 300, mint 3 oil ethprice / oilprice * eth
-    // how much eth to returnj? token = ethprice/assetprice * eth
-    // eth = token/price
-
-
     }
-
 }

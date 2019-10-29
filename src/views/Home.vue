@@ -26,16 +26,30 @@
     <div class="row row-space-4" v-if="assetId">
       <div class="col-md-4">
 
-        <label>Asset ID</label>
-        <p class="lead hi">{{assetId}}</p>
+        <label :class="{none: isHovering2|| isHovering3}">Asset ID</label>
+        <p class="lead"
+            @mouseover="isHovering1 = true"
+            @mouseout="isHovering1 = false"
+            :class="{hi: !isHovering1, none: isHovering2|| isHovering3}"
+            >
+            {{assetId}}
+        </p>
       </div>
       <div class="col-md-4">
-        <label>CDP ID</label>
-        <p class="lead hi">{{cdpId}}</p>
+        <label :class="{none: isHovering1|| isHovering3}">CDP ID</label>
+        <p class="lead"
+            @mouseover="isHovering2 = true"
+            @mouseout="isHovering2 = false"
+            :class="{hi: !isHovering2, none: isHovering1 || isHovering3}">
+            {{cdpId}}</p>
       </div>
       <div class="col-md-4" v-if="erc20Address && erc20Address !== ZEROX">
-        <label>ERC20 Contract Address</label>
-        <p class="lead hi">{{erc20Address}}</p>
+        <label :class="{none: isHovering2|| isHovering1}">ERC20 Contract Address</label>
+        <p class="lead"
+            @mouseover="isHovering3 = true"
+            @mouseout="isHovering3 = false"
+            :class="{hi: !isHovering3, none: isHovering1 || isHovering2}">
+            {{erc20Address}}</p>
       </div>
     </div>
 
@@ -76,8 +90,8 @@
       </div>
     </div>
 
-    <div class="row row-space-4" v-if="assetId">
-      <div class="col-md-6">
+    <div class="row row-space-4" v-if="valueOnChainInEthString">
+      <div class="col-md-3">
         <div class="card">
           <div class="card-body">
             <h4 class="mb-4">Mint</h4>
@@ -91,13 +105,42 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4">Add collateral</h4>
+
+            <div class="mb-4">
+              <label>ETH</label>
+              <input class="form-control" v-model="addEth" type="number">
+            </div>
+
+            <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4">Draw</h4>
+
+            <div class="mb-4">
+                <p>Mint more tokens and increase debt</p>
+              <label>Amount</label>
+              <input class="form-control" v-model="drawAmount" type="number">
+            </div>
+
+            <button class="btn btn-block btn-primary" @click="draw">Draw</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
         <div class="card">
           <div class="card-body">
             <h4 class="mb-4">Burn</h4>
 
             <!-- <div class="mb-4"> -->
-              <!-- <label># Tokens</label> -->
+              <label>Pay whole debt and close CDP</label>
               <!-- <input class="form-control" v-model="tokens" type="number"> -->
             <!-- </div> -->
 
@@ -129,7 +172,8 @@
 <script>
 // import Web3 from 'web3'
 import BN from 'bignumber.js'
-import { enableEth, read, mint, cdps, balanceOf, burn, getContractAddress, cdpId, getAssetId, liquidate } from '@/utils/commons'
+import { enableEth, read, mint, draw, collateralize, cdps, balanceOf, burn,
+  getContractAddress, cdpId, getAssetId, liquidate } from '@/utils/commons'
 
 const ZEROX = '0x0000000000000000000000000000000000000000'
 
@@ -155,6 +199,8 @@ export default {
       id: null,
       valueOnChainInEth: null,
       eth: null,
+      addEth: null,
+      drawAmount: null,
       tx: null,
       cdpResult: null,
       tokens: null,
@@ -164,7 +210,10 @@ export default {
       debt: null,
       ZEROX,
       cdpId: null,
-      ratio: null
+      ratio: null,
+      isHovering1: false,
+      isHovering2: false,
+      isHovering3: false
     }
   },
   computed: {
@@ -216,7 +265,10 @@ export default {
       }
     },
     updateUserBalance: async function () {
-      if (!this.erc20Address || this.erc20Address === ZEROX) return
+      if (!this.erc20Address || this.erc20Address === ZEROX) {
+        this.userErc20Balance = null
+        return
+      }
 
       const balance = await balanceOf(this.erc20Address)
       // console.log('lol balance is ', balance)
@@ -255,6 +307,20 @@ export default {
 
       this.refresh()
     },
+    draw: async function () {
+      const { tx } = await draw(this.selected, this.drawAmount)
+
+      this.tx = tx
+
+      this.refresh()
+    },
+    collateralize: async function () {
+      const { tx } = await collateralize(this.selected, this.addEth)
+
+      this.tx = tx
+
+      this.refresh()
+    },
     burn: async function () {
       await burn(this.selected, this.erc20Address)
 
@@ -285,5 +351,9 @@ export default {
 .hi {
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.none {
+    display: none;
 }
 </style>
