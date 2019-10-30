@@ -39,6 +39,7 @@
     "truffle-hdwallet-provider": "^1.0.16",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
+    "vue-element-loading": "^1.1.5",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1",
     "web3": "^1.2.0"

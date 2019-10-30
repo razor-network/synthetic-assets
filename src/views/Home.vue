@@ -1,14 +1,17 @@
 <template>
     <div>
+        <vue-element-loading :active="show" spinner="bar-fade-scale" is-full-screen color="#171aa5" size="128"/>
+
   <div class="mb-30">
     <div class="row row-space-12">
         <div class="col-xl-6 col-lg-6 mb-4">
           <!-- <div class="row"> -->
             <h3 > Welcome to Razor Synthetic Assets</h3>
+
             <p> Using this dapp you can "mint" tokens which tracks any asset in the world.</p>
             <p> It uses <a target="_blank" href="https://razor.network"> Razor Oracle Network</a> to get the data.</p>
             <p> Please select an asset below or add your own datafeed here: <a target="_blank" href = 'https://razorscan.io/#/query'>RazorScan</a> </p>
-            <b> Note: Please select Göerli testnet in metamask. This is a demo application deployed on Görli testnet. Please don't send valuable assets! </b>
+            <b> Note: This is a demo application deployed on Görli testnet. Please don't send valuable assets! </b>
             <b> You will need some Göerli ether to use the app. Get some <a target="_blank" href='https://goerli-faucet.slock.it/'>here</a> </b>
 <br/>
 <br/>
@@ -22,12 +25,16 @@
             <br/>
             <h3> What is the minimum collateral ratio </h3>
             <p>Minimum collateral ratio is 200%, below which the CDP may be liquidated. </p>
-
+            <div class="alert alert-danger" v-if="warning" role="alert">
+Please select Göerli testnet in metamask to continue.
+</div>
+<div v-if="!warning">
             <h3>Please select an Asset</h3>
             <select v-model="selected" @change="refresh()" class="form-control mb-30">
               <option disabled selected :value="null">Select</option>
               <option v-for="job in jobs" :value="job" :key="job.id">{{ job.name }}</option>
             </select>
+        </div>
             <br/>
           <!-- </div> -->
         </div>
@@ -38,8 +45,14 @@
             </div>
           </div>
         </div>
-        <button class = 'btn btn-secondary' v-if="assetId" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Show more info </button>
-      <!-- <div class="col-md-4" v-if="selected"> -->
+        <div class = "row mb-30">
+            <div class ="col-md-2" ><button class = 'btn btn-secondary' v-if="assetId" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Show Details </button>
+</div>
+<div class ="col-md-2" >
+        <button class = 'btn btn-secondary' v-if="assetId" @click="refresh"> <font-awesome-icon icon="sync" /> Refresh </button>
+    </div>
+    </div>
+     <!-- <div class="col-md-4" v-if="selected"> -->
         <!-- <div> -->
           <!-- <label>Actions</label> -->
         <!-- </div> -->
@@ -51,62 +64,72 @@
 
 <div v-if="showInfo" >
     <div class="row row-space-4" v-if="assetId">
-      <div class="col-md-2">
+      <div class="col-md-2 card-body">
 
-        <label :class="{none: isHovering2|| isHovering3 || isHovering4 || isHovering5}">Asset ID</label>
+        <label :class="{none: isHovering2|| isHovering3 || isHovering4 || isHovering5 || isHovering6}">Asset ID</label>
         <p class="lead"
             @mouseover="isHovering1 = true;
             info='This is the asset ID unique to the URL and the selector'"
             @mouseout="isHovering1 = false"
-            :class="{hi: !isHovering1, none:  isHovering2|| isHovering3 || isHovering4 || isHovering5}"
+            :class="{hi: !isHovering1, none:  isHovering2|| isHovering3 || isHovering4 || isHovering5 || isHovering6}"
             >
             {{assetId}}
         </p>
       </div>
-      <div class="col-md-2">
-        <label :class="{none: isHovering1|| isHovering3|| isHovering4 || isHovering5}">CDP ID</label>
+      <div class="col-md-2 card-body">
+        <label :class="{none: isHovering1|| isHovering3|| isHovering4 || isHovering5 || isHovering6}">CDP ID</label>
         <p class="lead"
             @mouseover="isHovering2 = true;
             info='This is the CDP ID unique to the asset and your Ethereum address'"
             @mouseout="isHovering2 = false"
-            :class="{hi: !isHovering2, none: isHovering1 || isHovering3 || isHovering4 || isHovering5}">
+            :class="{hi: !isHovering2, none: isHovering1 || isHovering3 || isHovering4 || isHovering5 || isHovering6}">
             {{cdpId}}</p>
       </div>
-      <div class="col-md-2" v-if="erc20Address && erc20Address !== ZEROX">
-        <label :class="{none: isHovering2|| isHovering1|| isHovering4 || isHovering5}">ERC20 Address</label>
+      <div class="col-md-2 card-body" v-if="erc20Address && erc20Address !== ZEROX">
+        <label :class="{none: isHovering2|| isHovering1|| isHovering4 || isHovering5 || isHovering6}">ERC20 Address</label>
         <p class="lead"
            @mouseover="isHovering3 = true;
         info='This is the ERC20 token contract address for this asset'"
         @mouseout="isHovering3 = false"
-        :class="{hi: !isHovering3, none: isHovering2|| isHovering1|| isHovering4 || isHovering5}"
+        :class="{hi: !isHovering3, none: isHovering2|| isHovering1|| isHovering4 || isHovering5 || isHovering6}"
         ><a
         target="_blank"
 
             :href="'https://goerli.etherscan.io/address/'+erc20Address">
             {{erc20Address}}</a> </p>
       </div>
-      <div class="col-md-2" v-if="selected">
-        <label :class="{none: isHovering1|| isHovering2 || isHovering3 || isHovering5}">URL</label>
+      <div class="col-md-2 card-body" v-if="selected">
+        <label :class="{none: isHovering1|| isHovering2 || isHovering3 || isHovering5 || isHovering6}">URL</label>
         <p class="lead"
            @mouseover="isHovering4 = true;
         info='This is the URL from which the data will be fetched by Razor Oracle Network'"
         @mouseout="isHovering4 = false"
-        :class="{hi: !isHovering4, none: isHovering1 || isHovering2 || isHovering3 || isHovering5}"
+        :class="{hi: !isHovering4, none: isHovering1 || isHovering2 || isHovering3 || isHovering5 || isHovering6}"
         >{{selected.url}} </p>
       </div>
-      <div class="col-md-2" v-if="selected">
-        <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4}">Selector</label>
+      <div class="col-md-2 card-body" v-if="selected">
+        <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering6}">Selector</label>
         <p class="lead"
            @mouseover="isHovering5 = true;
         info='The JSON response selector'"
         @mouseout="isHovering5 = false"
-        :class="{hi: !isHovering5, none: isHovering1|| isHovering2 || isHovering3 || isHovering4}"
+        :class="{hi: !isHovering5, none: isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering6}"
         >
             {{selected.selector}} </p>
       </div>
+      <div class="col-md-2 card-body" v-if="selected">
+        <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering5}">Last price</label>
+        <p class="lead"
+           @mouseover="isHovering6 = true;
+        info='The JSON response selector'"
+        @mouseout="isHovering6 = false"
+        :class="{hi: !isHovering5, none: isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering5}"
+        >
+            {{selected.result}} </p>
+      </div>
     </div>
 </div>
-    <div class="alert alert-info" role="alert" :class="{invisible: !(isHovering1 || isHovering2 || isHovering3 || isHovering4 || isHovering5)}">
+    <div class="alert alert-info" role="alert" :class="{invisible: !(isHovering1 || isHovering2 || isHovering3 || isHovering4 || isHovering5 || isHovering6)}">
 {{info}}    </div>
 
 
@@ -123,7 +146,7 @@
         <div class="card">
           <div class="card-body">
             <p class="lead">Your Balance</p>
-            <h4 class="m-0">{{userErc20BalanceString.first}}<small class="text-muted">{{userErc20BalanceString.second}} <small>TOKENS</small></small></h4>
+            <h4 class="m-0">{{userErc20BalanceString.first}}<small class="text-muted">{{userErc20BalanceString.second}} <small>{{selected.name}}</small></small></h4>
           </div>
         </div>
       </div>
@@ -131,7 +154,7 @@
         <div class="card">
           <div class="card-body">
             <p class="lead">Debt</p>
-            <h4 class="m-0">{{debtString.first}}<small class="text-muted">{{debtString.second}} <small>TOKENS</small></small></h4>
+            <h4 class="m-0">{{debtString.first}}<small class="text-muted">{{debtString.second}} <small>{{selected.name}}</small></small></h4>
           </div>
         </div>
       </div>
@@ -203,7 +226,8 @@
               <label>ETH</label>
               <input class="form-control" v-model="addEth" type="number">
             </div>
-
+            <div v-if="CRafterCollateralized" >Future collateral Ratio: {{CRafterCollateralized}} % </div>
+<br/>
             <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
           </div>
         </div>
@@ -218,7 +242,8 @@
               <label>Amount</label>
               <input class="form-control" v-model="drawAmount" type="number">
             </div>
-
+            <div v-if="CRafterDraw" :class="{red: CRafterDraw<200}" >Future collateral Ratio: {{CRafterDraw}} % </div>
+<br/>
             <button class="btn btn-block btn-primary" @click="draw">Draw</button>
           </div>
         </div>
@@ -245,7 +270,7 @@
 // import Web3 from 'web3'
 import BN from 'bignumber.js'
 import { enableEth, read, mint, draw, collateralize, transfer, cdps, balanceOf, burn,
-  getContractAddress, cdpId, getAssetId, liquidate } from '@/utils/commons'
+  getContractAddress, cdpId, getAssetId, liquidate, getNetwork } from '@/utils/commons'
 
 const ZEROX = '0x0000000000000000000000000000000000000000'
 
@@ -288,10 +313,13 @@ export default {
       isHovering3: false,
       isHovering4: false,
       isHovering5: false,
+      isHovering6: false,
       info: "test",
       transferAmount: null,
       transferAddress: null,
-      showInfo: false
+      showInfo: false,
+      show: false,
+      warning: null
       // expected: null
     }
   },
@@ -326,6 +354,21 @@ export default {
       if (isNaN(this.ratio)) return
 
       return Math.round(this.ratio * 10000, 4) / 100
+  },
+    CRafterCollateralized: function() {
+        if (!this.ratio) return
+        if (isNaN(this.ratio)) return
+        if (this.addEth==0) return
+        const x = (new BN(this.debt).multipliedBy(this.valueOnChainInEth)).dividedBy(new BN(this.collateral).plus(this.addEth))
+        return Math.round((100 / x),2)
+    },
+    CRafterDraw: function() {
+        if (!this.ratio) return
+        if (isNaN(this.ratio)) return
+        if (this.drawAmount==0) return
+        const x = (new BN(this.debt).plus(new BN(this.drawAmount))).multipliedBy(this.valueOnChainInEth).dividedBy(new BN(this.collateral))
+        return ((100 / x))
+        // return Math.round((100 / x),2)
     }
   },
   watch: {
@@ -333,8 +376,10 @@ export default {
       this.refresh()
     }
   },
-  mounted () {
-    enableEth()
+  async mounted () {
+    await enableEth()
+    this.warning = await getNetwork()
+    console.log(this.warning)
     this.getJobs()
   },
   methods: {
@@ -353,8 +398,8 @@ export default {
           'url': data.data.message[i].url,
           'id': data.data.message[i].id,
           'name': data.data.message[i].name,
-          'selector': data.data.message[i].selector
-
+          'selector': data.data.message[i].selector,
+          'result': data.data.message[i].result/100000000
         })
       }
     },
@@ -379,6 +424,7 @@ export default {
     //   this.refresh()
     // },
     refresh: async function () {
+    this.show=true
       this.assetId = await getAssetId(this.selected.id)
       console.log('this.assetId', this.assetId)
       await this.updateCdpInfo()
@@ -393,6 +439,7 @@ export default {
       const x = (new BN(this.debt).multipliedBy(this.valueOnChainInEth)).dividedBy(this.collateral)
       this.ratio = 1 / x
       await this.updateUserBalance()
+      this.show=false
     },
     mint: async function () {
       const { tx } = await mint(this.selected.id, this.eth)
@@ -456,5 +503,11 @@ export default {
 a {
      text-decoration: underline;
      color: grey;
+}
+.red {
+    color:red;
+}
+.whiteBg {
+    background: white;
 }
 </style>

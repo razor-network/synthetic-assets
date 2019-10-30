@@ -40,10 +40,10 @@ contract CDPFactory {
     {
         uint256 eth = msg.value;
         address sender = msg.sender;
-        // (string memory url, string memory selector, bool repeat, uint256 result) = delegator.getJob(jobId);
-        (string memory url, string memory selector, , uint256 result) = delegator.getJob(jobId);
+        // (string memory url, string memory selector, string memory name, bool repeat, uint256 result)
+        (string memory url, string memory selector, string memory name , , uint256 result) = delegator.getJob(jobId);
         bytes32 id = keccak256(abi.encodePacked(url, selector));
-        (, , , uint256 ethPrice) = delegator.getJob(1);
+        (, , , , uint256 ethPrice) = delegator.getJob(1);
 
         // uint256 price = (result)/ethPrice;
         require(ethPrice != 0,"Eth Price cannot be zero");
@@ -53,7 +53,7 @@ contract CDPFactory {
         if (toMint == 0) revert("toMint is 0");
         // emit Debug(toMint);
         if (contracts[id] == 0x0000000000000000000000000000000000000000) {
-            SimpleToken _st = new SimpleToken();
+            SimpleToken _st = new SimpleToken(string(abi.encodePacked("Razor Synthetic ", name)), name, 18);
             address ad = address(_st);
             contracts[id] = ad;
         }
@@ -76,12 +76,12 @@ contract CDPFactory {
     {
         if (amount == 0) revert("amount is 0");
         address sender = msg.sender;
-        (string memory url, string memory selector, , uint256 price) = delegator.getJob(jobId);
+        (string memory url, string memory selector, , , uint256 price) = delegator.getJob(jobId);
         bytes32 id = keccak256(abi.encodePacked(url, selector));
         bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
         CDP storage cdp = cdps[cdpid];
         if(cdp.collateral == 0) revert('CDP has 0 collateral');
-        (, , , uint256 ethPrice) = delegator.getJob(1);
+        (, , , , uint256 ethPrice) = delegator.getJob(1);
 
         require(ethPrice != 0,"Eth Price cannot be zero");
         require(price != 0,"Asset price cannot be zero");
@@ -96,7 +96,7 @@ contract CDPFactory {
     }
 
     function increaseCollateral(uint256 jobId) public payable {
-        (string memory url, string memory selector, , uint256 result) = delegator.getJob(jobId);
+        (string memory url, string memory selector, , , uint256 result) = delegator.getJob(jobId);
         require(result > 0, "Result cannot be zero");
         bytes32 id = keccak256(abi.encodePacked(url, selector));
         bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
@@ -108,7 +108,7 @@ contract CDPFactory {
     function burn(uint256 jobId) public
     {
         address sender = msg.sender;
-        (string memory url, string memory selector, , uint256 result) = delegator.getJob(jobId);
+        (string memory url, string memory selector, , , uint256 result) = delegator.getJob(jobId);
         bytes32 id = keccak256(abi.encodePacked(url, selector));
         bytes32 cdpid = keccak256(abi.encodePacked(msg.sender, id));
         CDP storage cdp = cdps[cdpid];
@@ -126,7 +126,7 @@ contract CDPFactory {
         CDP storage cdp = cdps[cdpId];
         emit DebugBytes32(cdp.assetId);
         uint256 price = delegator.getResult(cdp.jobId);
-        (, , , uint256 ethPrice) = delegator.getJob(1);
+        (, , , , uint256 ethPrice) = delegator.getJob(1);
 
         require(ethPrice != 0,"Eth Price cannot be zero");
         require(price != 0,"Asset price cannot be zero");

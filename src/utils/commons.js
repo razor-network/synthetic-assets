@@ -18,6 +18,7 @@ let networkId = 5
 let _1e18 = new BigNumber('1000000000000000000')
 let Oracle
 let CDPFactory
+// let warning = false
 export const enableEth = async () => {
   if (typeof window.ethereum === 'undefined'
     || typeof window.web3 === 'undefined') {
@@ -49,6 +50,13 @@ export const EventBus = new Vue()
 // tx: res.transactionHash
 // }
 // }
+
+export const getNetwork = async() => {
+  let id = await web3.eth.net.getId()
+  if (id !== 5) return true
+  return false
+}
+
 export const getContractAddress = (assetId) => {
   return CDPFactory.methods.contracts(assetId).call()
 }
