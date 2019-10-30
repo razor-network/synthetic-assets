@@ -46,7 +46,8 @@ Please select Göerli testnet in metamask to continue.
           </div>
         </div>
         <div class = "row mb-30">
-            <div class ="col-md-2" ><button class = 'btn btn-secondary' v-if="assetId" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Show Details </button>
+            <div class ="col-md-2" ><button class = 'btn btn-secondary' v-if="assetId && !showInfo" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Show Details </button>
+            <button class = 'btn btn-secondary' v-if="assetId && showInfo" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Hide Details </button>
 </div>
 <div class ="col-md-2" >
         <button class = 'btn btn-secondary' v-if="assetId" @click="refresh"> <font-awesome-icon icon="sync" /> Refresh </button>
