@@ -68,7 +68,7 @@ Please select Göerli testnet in metamask to continue.
       <div class="col-md-2 card-body">
 
         <label :class="{none: isHovering2|| isHovering3 || isHovering4 || isHovering5 || isHovering6}">Asset ID</label>
-        <p class="lead"
+        <p class="lead singleLine"
             @mouseover="isHovering1 = true;
             info='This is the asset ID unique to the URL and the selector'"
             @mouseout="isHovering1 = false"
@@ -79,7 +79,7 @@ Please select Göerli testnet in metamask to continue.
       </div>
       <div class="col-md-2 card-body">
         <label :class="{none: isHovering1|| isHovering3|| isHovering4 || isHovering5 || isHovering6}">CDP ID</label>
-        <p class="lead"
+        <p class="lead singleLine"
             @mouseover="isHovering2 = true;
             info='This is the CDP ID unique to the asset and your Ethereum address'"
             @mouseout="isHovering2 = false"
@@ -88,7 +88,7 @@ Please select Göerli testnet in metamask to continue.
       </div>
       <div class="col-md-2 card-body" v-if="erc20Address && erc20Address !== ZEROX">
         <label :class="{none: isHovering2|| isHovering1|| isHovering4 || isHovering5 || isHovering6}">ERC20 Address</label>
-        <p class="lead"
+        <p class="lead singleLine"
            @mouseover="isHovering3 = true;
         info='This is the ERC20 token contract address for this asset'"
         @mouseout="isHovering3 = false"
@@ -101,7 +101,7 @@ Please select Göerli testnet in metamask to continue.
       </div>
       <div class="col-md-2 card-body" v-if="selected">
         <label :class="{none: isHovering1|| isHovering2 || isHovering3 || isHovering5 || isHovering6}">URL</label>
-        <p class="lead"
+        <p class="lead singleLine"
            @mouseover="isHovering4 = true;
         info='This is the URL from which the data will be fetched by Razor Oracle Network'"
         @mouseout="isHovering4 = false"
@@ -110,7 +110,7 @@ Please select Göerli testnet in metamask to continue.
       </div>
       <div class="col-md-2 card-body" v-if="selected">
         <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering6}">Selector</label>
-        <p class="lead"
+        <p class="lead singleLine"
            @mouseover="isHovering5 = true;
         info='The JSON response selector'"
         @mouseout="isHovering5 = false"
@@ -120,9 +120,9 @@ Please select Göerli testnet in metamask to continue.
       </div>
       <div class="col-md-2 card-body" v-if="selected">
         <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering5}">Last price</label>
-        <p class="lead"
+        <p class="lead singleLine"
            @mouseover="isHovering6 = true;
-        info='The JSON response selector'"
+        info='Last reported price by the Razor Oracle Network'"
         @mouseout="isHovering6 = false"
         :class="{hi: !isHovering5, none: isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering5}"
         >
@@ -135,7 +135,7 @@ Please select Göerli testnet in metamask to continue.
 
 
     <div class="row row-space-4">
-      <div class="col-md-3" v-if="valueOnChainInEthString">
+      <div class="col-md-3 mb-50" v-if="valueOnChainInEthString">
         <div class="card">
           <div class="card-body">
             <p class="lead">Asset Value</p>
@@ -171,9 +171,9 @@ Please select Göerli testnet in metamask to continue.
       </div>
     </div>
 
-    <div class="row row-space-4" v-if="valueOnChainInEthString">
-      <div class="col-md-4">
-        <div class="card">
+    <div class="row " v-if="valueOnChainInEthString">
+      <div class="col-md-4 ">
+        <div class="card ">
           <div class="card-body">
             <h4 class="mb-4">Mint</h4>
 <p>Collateralize with Ether to mint the asset. Asset will be minted with 500% collateral ratio by default.</p>
@@ -186,8 +186,8 @@ Please select Göerli testnet in metamask to continue.
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card">
+      <div class="col-md-4 ">
+        <div class="card ">
           <div class="card-body">
             <h4 class="mb-4">Transfer</h4>
 <p>Transfer tokens</p>
@@ -204,8 +204,9 @@ Please select Göerli testnet in metamask to continue.
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card">
+
+      <div class="col-md-4 mb-auto">
+        <div class="card ">
           <div class="card-body">
             <h4 class="mb-4">Burn</h4>
 
@@ -218,6 +219,9 @@ Please select Göerli testnet in metamask to continue.
           </div>
         </div>
       </div>
+  </div>
+  <div class="row " v-if="valueOnChainInEthString">
+
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
@@ -249,6 +253,7 @@ Please select Göerli testnet in metamask to continue.
           </div>
         </div>
       </div>
+  </div>
 
 
       <!-- <div class="col-md-4 overlay-disabled">
@@ -493,6 +498,12 @@ export default {
 .hi {
   text-overflow: ellipsis;
   overflow: hidden;
+
+}
+
+.singleLine {
+    word-break: break-all;
+    white-space: nowrap;
 }
 
 .none {
@@ -511,4 +522,5 @@ a {
 .whiteBg {
     background: white;
 }
+
 </style>

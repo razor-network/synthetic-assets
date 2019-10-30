@@ -1,13 +1,29 @@
 <template>
   <div class="app-base">
-    <div class="top-bar">
-      <div class="container d-flex">
+    <!-- <div class="top-bar"> -->
+        <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-our container d-flex">
+            <div class="brand">
+              <img src="@/assets/img/logo.svg" height="26px">
+              <strong>Synthetic Assets</strong>
+            </div>  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <!-- <a class="nav-item nav-link active" href="#">Home </a> -->
+      <a class="nav-item nav-link" target="_blank" href="https://razor.network">About</a>
+      <a class="nav-item nav-link" target="_blank" href="https://razorscan.io">Explore</a>
+      <a class="nav-item nav-link" target="_blank" href="https://t.me/razornetwork">Help</a>
+    </div>
+  </div>
+</nav>
+      <!-- <div class="container d-flex">
         <div class="brand">
           <img src="@/assets/img/logo.svg" height="26px">
           <strong>Synthetic Assets</strong>
         </div>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
 
     <div class="container">
       <router-view></router-view>
@@ -105,3 +121,8 @@ export default {
   }
 }
 </script>
+<style>
+.bg-our {
+    background: #F0F4F8;
+}
+</style>
