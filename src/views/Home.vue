@@ -1,17 +1,44 @@
 <template>
     <div>
-  <div class="mb-6">
-    <div class="row row-space-6">
+  <div class="mb-30">
+    <div class="row row-space-12">
         <div class="col-xl-6 col-lg-6 mb-4">
-          <div class="row">
-            <h3 >Please select a datafeed</h3>
-            <p> Note: Please select Göerli testnet in metamask. </p>
-            <select v-model="selected" @change="refresh()" class="form-control">
-              <option disabled selected :value="null">Select a datafeed</option>
-              <option v-for="job in jobs" :value="job.id" :key="job.id">{{ job.name }}</option>
+          <!-- <div class="row"> -->
+            <h3 > Welcome to Razor Synthetic Assets</h3>
+            <p> Using this dapp you can "mint" tokens which tracks any asset in the world.</p>
+            <p> It uses <a target="_blank" href="https://razor.network"> Razor Oracle Network</a> to get the data.</p>
+            <p> Please select an asset below or add your own datafeed here: <a target="_blank" href = 'https://razorscan.io/#/query'>RazorScan</a> </p>
+            <b> Note: Please select Göerli testnet in metamask. This is a demo application deployed on Görli testnet. Please don't send valuable assets! </b>
+            <b> You will need some Göerli ether to use the app. Get some <a target="_blank" href='https://goerli-faucet.slock.it/'>here</a> </b>
+<br/>
+<br/>
+            <h3> How to open a short position</h3>
+            <p> Creating a CDP using this app backed by Ether will mint the synthetic tokens. You can sell these ERC20 tokens to anyone to open a "short" position </p>
+            <br/>
+            <br/>
+            <h3> How to open a long position </h3>
+            <p> Buy the synthetic ERC20 tokens from anyone to open a long position. </p>
+            <br/>
+            <br/>
+            <h3> What is the minimum collateral ratio </h3>
+            <p>Minimum collateral ratio is 200%, below which the CDP may be liquidated. </p>
+
+            <h3>Please select an Asset</h3>
+            <select v-model="selected" @change="refresh()" class="form-control mb-30">
+              <option disabled selected :value="null">Select</option>
+              <option v-for="job in jobs" :value="job" :key="job.id">{{ job.name }}</option>
             </select>
+            <br/>
+          <!-- </div> -->
+        </div>
+          <div class="col-md-6">
+            <div class="p-6">
+              <img src="@/assets/img/hello.svg" class="img-fluid">
+              <!-- <div class="footer"> (c) 2019 All rights reserved </div> -->
+            </div>
           </div>
         </div>
+        <button class = 'btn btn-secondary' v-if="assetId" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Show more info </button>
       <!-- <div class="col-md-4" v-if="selected"> -->
         <!-- <div> -->
           <!-- <label>Actions</label> -->
@@ -21,45 +48,65 @@
           <!-- <button type="button" class="btn btn-secondary" @click="request">Update Price</button> -->
         <!-- </div> -->
       </div>
-    </div>
 
+<div v-if="showInfo" >
     <div class="row row-space-4" v-if="assetId">
-      <div class="col-md-4">
+      <div class="col-md-2">
 
-        <label :class="{none: isHovering2|| isHovering3}">Asset ID</label>
+        <label :class="{none: isHovering2|| isHovering3 || isHovering4 || isHovering5}">Asset ID</label>
         <p class="lead"
             @mouseover="isHovering1 = true;
             info='This is the asset ID unique to the URL and the selector'"
             @mouseout="isHovering1 = false"
-            :class="{hi: !isHovering1, none: isHovering2|| isHovering3}"
+            :class="{hi: !isHovering1, none:  isHovering2|| isHovering3 || isHovering4 || isHovering5}"
             >
             {{assetId}}
         </p>
       </div>
-      <div class="col-md-4">
-        <label :class="{none: isHovering1|| isHovering3}">CDP ID</label>
+      <div class="col-md-2">
+        <label :class="{none: isHovering1|| isHovering3|| isHovering4 || isHovering5}">CDP ID</label>
         <p class="lead"
             @mouseover="isHovering2 = true;
             info='This is the CDP ID unique to the asset and your Ethereum address'"
             @mouseout="isHovering2 = false"
-            :class="{hi: !isHovering2, none: isHovering1 || isHovering3}">
+            :class="{hi: !isHovering2, none: isHovering1 || isHovering3 || isHovering4 || isHovering5}">
             {{cdpId}}</p>
       </div>
-      <div class="col-md-4" v-if="erc20Address && erc20Address !== ZEROX">
-        <label :class="{none: isHovering2|| isHovering1}">ERC20 Contract Address</label>
+      <div class="col-md-2" v-if="erc20Address && erc20Address !== ZEROX">
+        <label :class="{none: isHovering2|| isHovering1|| isHovering4 || isHovering5}">ERC20 Address</label>
         <p class="lead"
            @mouseover="isHovering3 = true;
         info='This is the ERC20 token contract address for this asset'"
         @mouseout="isHovering3 = false"
-        :class="{hi: !isHovering3, none: isHovering1 || isHovering2}"
+        :class="{hi: !isHovering3, none: isHovering2|| isHovering1|| isHovering4 || isHovering5}"
         ><a
         target="_blank"
 
             :href="'https://goerli.etherscan.io/address/'+erc20Address">
             {{erc20Address}}</a> </p>
       </div>
+      <div class="col-md-2" v-if="selected">
+        <label :class="{none: isHovering1|| isHovering2 || isHovering3 || isHovering5}">URL</label>
+        <p class="lead"
+           @mouseover="isHovering4 = true;
+        info='This is the URL from which the data will be fetched by Razor Oracle Network'"
+        @mouseout="isHovering4 = false"
+        :class="{hi: !isHovering4, none: isHovering1 || isHovering2 || isHovering3 || isHovering5}"
+        >{{selected.url}} </p>
+      </div>
+      <div class="col-md-2" v-if="selected">
+        <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4}">Selector</label>
+        <p class="lead"
+           @mouseover="isHovering5 = true;
+        info='The JSON response selector'"
+        @mouseout="isHovering5 = false"
+        :class="{hi: !isHovering5, none: isHovering1|| isHovering2 || isHovering3 || isHovering4}"
+        >
+            {{selected.selector}} </p>
+      </div>
     </div>
-    <div class="alert alert-info" role="alert" :class="{invisible: !(isHovering1 || isHovering2 || isHovering3)}">
+</div>
+    <div class="alert alert-info" role="alert" :class="{invisible: !(isHovering1 || isHovering2 || isHovering3 || isHovering4 || isHovering5)}">
 {{info}}    </div>
 
 
@@ -189,14 +236,7 @@
       </div> -->
     </div>
 
-    <div class="row row-space-4">
-      <div class="col-md-12">
-        <div class="p-4">
-          <img src="@/assets/img/hello.svg" class="img-fluid">
-          <!-- <div class="footer"> (c) 2019 All rights reserved </div> -->
-        </div>
-      </div>
-    </div>
+
   </div>
 
 </template>
@@ -246,9 +286,12 @@ export default {
       isHovering1: false,
       isHovering2: false,
       isHovering3: false,
+      isHovering4: false,
+      isHovering5: false,
       info: "test",
       transferAmount: null,
-      transferAddress: null
+      transferAddress: null,
+      showInfo: false
       // expected: null
     }
   },
@@ -309,7 +352,9 @@ export default {
         this.jobs.push({
           'url': data.data.message[i].url,
           'id': data.data.message[i].id,
-          'name': data.data.message[i].name
+          'name': data.data.message[i].name,
+          'selector': data.data.message[i].selector
+
         })
       }
     },
@@ -334,10 +379,10 @@ export default {
     //   this.refresh()
     // },
     refresh: async function () {
-      this.assetId = await getAssetId(this.selected)
+      this.assetId = await getAssetId(this.selected.id)
       console.log('this.assetId', this.assetId)
       await this.updateCdpInfo()
-      let res = await read(this.selected) / 100000000
+      let res = await read(this.selected.id) / 100000000
       console.log(res)
       let ethPrice = await read(1) / 100000000
       this.valueOnChainInEth = res / ethPrice
@@ -350,28 +395,28 @@ export default {
       await this.updateUserBalance()
     },
     mint: async function () {
-      const { tx } = await mint(this.selected, this.eth)
+      const { tx } = await mint(this.selected.id, this.eth)
 
       this.tx = tx
 
       this.refresh()
     },
     draw: async function () {
-      const { tx } = await draw(this.selected, this.drawAmount)
+      const { tx } = await draw(this.selected.id, this.drawAmount)
 
       this.tx = tx
 
       this.refresh()
     },
     collateralize: async function () {
-      const { tx } = await collateralize(this.selected, this.addEth)
+      const { tx } = await collateralize(this.selected.id, this.addEth)
 
       this.tx = tx
 
       this.refresh()
     },
     burn: async function () {
-      await burn(this.selected, this.erc20Address)
+      await burn(this.selected.id, this.erc20Address)
 
       this.refresh()
     },
@@ -407,5 +452,9 @@ export default {
 }
 .invisible {
     display: hidden;
+}
+a {
+     text-decoration: underline;
+     color: grey;
 }
 </style>
