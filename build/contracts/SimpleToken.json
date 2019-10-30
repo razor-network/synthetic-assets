@@ -415,14 +415,14 @@
     "absolutePath": "/Users/hrishi/synthetic-assets/contracts/SimpleToken.sol",
     "exportedSymbols": {
       "SimpleToken": [
-        684
+        842
       ]
     },
-    "id": 685,
+    "id": 843,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 659,
+        "id": 817,
         "literals": [
           "solidity",
           "^",
@@ -435,10 +435,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "id": 660,
+        "id": 818,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1400,
+        "scope": 843,
+        "sourceUnit": 1558,
         "src": "25:55:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -446,10 +446,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol",
-        "id": 661,
+        "id": 819,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1489,
+        "scope": 843,
+        "sourceUnit": 1647,
         "src": "81:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -457,10 +457,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20Mintable.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20Mintable.sol",
-        "id": 662,
+        "id": 820,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1517,
+        "scope": 843,
+        "sourceUnit": 1675,
         "src": "145:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -468,10 +468,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol",
-        "id": 663,
+        "id": 821,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1431,
+        "scope": 843,
+        "sourceUnit": 1589,
         "src": "209:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -482,17 +482,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 664,
+              "id": 822,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1399,
+              "referencedDeclaration": 1557,
               "src": "528:5:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$1399",
+                "typeIdentifier": "t_contract$_ERC20_$1557",
                 "typeString": "contract ERC20"
               }
             },
-            "id": 665,
+            "id": 823,
             "nodeType": "InheritanceSpecifier",
             "src": "528:5:4"
           },
@@ -500,17 +500,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 666,
+              "id": 824,
               "name": "ERC20Detailed",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1488,
+              "referencedDeclaration": 1646,
               "src": "535:13:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20Detailed_$1488",
+                "typeIdentifier": "t_contract$_ERC20Detailed_$1646",
                 "typeString": "contract ERC20Detailed"
               }
             },
-            "id": 667,
+            "id": 825,
             "nodeType": "InheritanceSpecifier",
             "src": "535:13:4"
           },
@@ -518,17 +518,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 668,
+              "id": 826,
               "name": "ERC20Mintable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1516,
+              "referencedDeclaration": 1674,
               "src": "550:13:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20Mintable_$1516",
+                "typeIdentifier": "t_contract$_ERC20Mintable_$1674",
                 "typeString": "contract ERC20Mintable"
               }
             },
-            "id": 669,
+            "id": 827,
             "nodeType": "InheritanceSpecifier",
             "src": "550:13:4"
           },
@@ -536,51 +536,51 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 670,
+              "id": 828,
               "name": "ERC20Burnable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1430,
+              "referencedDeclaration": 1588,
               "src": "565:13:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20Burnable_$1430",
+                "typeIdentifier": "t_contract$_ERC20Burnable_$1588",
                 "typeString": "contract ERC20Burnable"
               }
             },
-            "id": 671,
+            "id": 829,
             "nodeType": "InheritanceSpecifier",
             "src": "565:13:4"
           }
         ],
         "contractDependencies": [
-          869,
-          1399,
-          1430,
-          1488,
-          1516,
-          1585
+          1027,
+          1557,
+          1588,
+          1646,
+          1674,
+          1743
         ],
         "contractKind": "contract",
         "documentation": "@title SimpleToken\n@dev Very simple ERC20 Token example, where all tokens are pre-assigned to the creator.\nNote they can later distribute these tokens as they wish using `transfer` and other\n`ERC20` functions.",
         "fullyImplemented": true,
-        "id": 684,
+        "id": 842,
         "linearizedBaseContracts": [
-          684,
-          1430,
-          1516,
-          869,
-          1488,
-          1399,
-          1585
+          842,
+          1588,
+          1674,
+          1027,
+          1646,
+          1557,
+          1743
         ],
         "name": "SimpleToken",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 674,
+            "id": 832,
             "name": "DECIMALS",
             "nodeType": "VariableDeclaration",
-            "scope": 684,
+            "scope": 842,
             "src": "585:35:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -589,7 +589,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 672,
+              "id": 830,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "585:5:4",
@@ -601,7 +601,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "3138",
-              "id": 673,
+              "id": 831,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -620,13 +620,13 @@
           },
           {
             "body": {
-              "id": 682,
+              "id": 840,
               "nodeType": "Block",
               "src": "873:53:4",
               "statements": []
             },
             "documentation": "@dev Constructor that gives msg.sender all of existing tokens.",
-            "id": 683,
+            "id": 841,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [
@@ -635,7 +635,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "52617a6f722053796e74686574696320436f696e",
-                    "id": 677,
+                    "id": 835,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -653,7 +653,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "525341",
-                    "id": 678,
+                    "id": 836,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -670,11 +670,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 679,
+                    "id": 837,
                     "name": "DECIMALS",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 674,
+                    "referencedDeclaration": 832,
                     "src": "863:8:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -682,17 +682,17 @@
                     }
                   }
                 ],
-                "id": 680,
+                "id": 838,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 676,
+                  "id": 834,
                   "name": "ERC20Detailed",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 1488,
+                  "referencedDeclaration": 1646,
                   "src": "818:13:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_type$_t_contract$_ERC20Detailed_$1488_$",
+                    "typeIdentifier": "t_type$_t_contract$_ERC20Detailed_$1646_$",
                     "typeString": "type(contract ERC20Detailed)"
                   }
                 },
@@ -703,25 +703,25 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 675,
+              "id": 833,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "808:2:4"
             },
             "returnParameters": {
-              "id": 681,
+              "id": 839,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "873:0:4"
             },
-            "scope": 684,
+            "scope": 842,
             "src": "796:130:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 685,
+        "scope": 843,
         "src": "504:424:4"
       }
     ],
@@ -731,14 +731,14 @@
     "absolutePath": "/Users/hrishi/synthetic-assets/contracts/SimpleToken.sol",
     "exportedSymbols": {
       "SimpleToken": [
-        684
+        842
       ]
     },
-    "id": 685,
+    "id": 843,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 659,
+        "id": 817,
         "literals": [
           "solidity",
           "^",
@@ -751,10 +751,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "id": 660,
+        "id": 818,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1400,
+        "scope": 843,
+        "sourceUnit": 1558,
         "src": "25:55:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -762,10 +762,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol",
-        "id": 661,
+        "id": 819,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1489,
+        "scope": 843,
+        "sourceUnit": 1647,
         "src": "81:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -773,10 +773,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20Mintable.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20Mintable.sol",
-        "id": 662,
+        "id": 820,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1517,
+        "scope": 843,
+        "sourceUnit": 1675,
         "src": "145:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -784,10 +784,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol",
         "file": "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol",
-        "id": 663,
+        "id": 821,
         "nodeType": "ImportDirective",
-        "scope": 685,
-        "sourceUnit": 1431,
+        "scope": 843,
+        "sourceUnit": 1589,
         "src": "209:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -798,17 +798,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 664,
+              "id": 822,
               "name": "ERC20",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1399,
+              "referencedDeclaration": 1557,
               "src": "528:5:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20_$1399",
+                "typeIdentifier": "t_contract$_ERC20_$1557",
                 "typeString": "contract ERC20"
               }
             },
-            "id": 665,
+            "id": 823,
             "nodeType": "InheritanceSpecifier",
             "src": "528:5:4"
           },
@@ -816,17 +816,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 666,
+              "id": 824,
               "name": "ERC20Detailed",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1488,
+              "referencedDeclaration": 1646,
               "src": "535:13:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20Detailed_$1488",
+                "typeIdentifier": "t_contract$_ERC20Detailed_$1646",
                 "typeString": "contract ERC20Detailed"
               }
             },
-            "id": 667,
+            "id": 825,
             "nodeType": "InheritanceSpecifier",
             "src": "535:13:4"
           },
@@ -834,17 +834,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 668,
+              "id": 826,
               "name": "ERC20Mintable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1516,
+              "referencedDeclaration": 1674,
               "src": "550:13:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20Mintable_$1516",
+                "typeIdentifier": "t_contract$_ERC20Mintable_$1674",
                 "typeString": "contract ERC20Mintable"
               }
             },
-            "id": 669,
+            "id": 827,
             "nodeType": "InheritanceSpecifier",
             "src": "550:13:4"
           },
@@ -852,51 +852,51 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 670,
+              "id": 828,
               "name": "ERC20Burnable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1430,
+              "referencedDeclaration": 1588,
               "src": "565:13:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC20Burnable_$1430",
+                "typeIdentifier": "t_contract$_ERC20Burnable_$1588",
                 "typeString": "contract ERC20Burnable"
               }
             },
-            "id": 671,
+            "id": 829,
             "nodeType": "InheritanceSpecifier",
             "src": "565:13:4"
           }
         ],
         "contractDependencies": [
-          869,
-          1399,
-          1430,
-          1488,
-          1516,
-          1585
+          1027,
+          1557,
+          1588,
+          1646,
+          1674,
+          1743
         ],
         "contractKind": "contract",
         "documentation": "@title SimpleToken\n@dev Very simple ERC20 Token example, where all tokens are pre-assigned to the creator.\nNote they can later distribute these tokens as they wish using `transfer` and other\n`ERC20` functions.",
         "fullyImplemented": true,
-        "id": 684,
+        "id": 842,
         "linearizedBaseContracts": [
-          684,
-          1430,
-          1516,
-          869,
-          1488,
-          1399,
-          1585
+          842,
+          1588,
+          1674,
+          1027,
+          1646,
+          1557,
+          1743
         ],
         "name": "SimpleToken",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 674,
+            "id": 832,
             "name": "DECIMALS",
             "nodeType": "VariableDeclaration",
-            "scope": 684,
+            "scope": 842,
             "src": "585:35:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -905,7 +905,7 @@
               "typeString": "uint8"
             },
             "typeName": {
-              "id": 672,
+              "id": 830,
               "name": "uint8",
               "nodeType": "ElementaryTypeName",
               "src": "585:5:4",
@@ -917,7 +917,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "3138",
-              "id": 673,
+              "id": 831,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -936,13 +936,13 @@
           },
           {
             "body": {
-              "id": 682,
+              "id": 840,
               "nodeType": "Block",
               "src": "873:53:4",
               "statements": []
             },
             "documentation": "@dev Constructor that gives msg.sender all of existing tokens.",
-            "id": 683,
+            "id": 841,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [
@@ -951,7 +951,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "52617a6f722053796e74686574696320436f696e",
-                    "id": 677,
+                    "id": 835,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -969,7 +969,7 @@
                   {
                     "argumentTypes": null,
                     "hexValue": "525341",
-                    "id": 678,
+                    "id": 836,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -986,11 +986,11 @@
                   },
                   {
                     "argumentTypes": null,
-                    "id": 679,
+                    "id": 837,
                     "name": "DECIMALS",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 674,
+                    "referencedDeclaration": 832,
                     "src": "863:8:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
@@ -998,17 +998,17 @@
                     }
                   }
                 ],
-                "id": 680,
+                "id": 838,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 676,
+                  "id": 834,
                   "name": "ERC20Detailed",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 1488,
+                  "referencedDeclaration": 1646,
                   "src": "818:13:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_type$_t_contract$_ERC20Detailed_$1488_$",
+                    "typeIdentifier": "t_type$_t_contract$_ERC20Detailed_$1646_$",
                     "typeString": "type(contract ERC20Detailed)"
                   }
                 },
@@ -1019,25 +1019,25 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 675,
+              "id": 833,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "808:2:4"
             },
             "returnParameters": {
-              "id": 681,
+              "id": 839,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "873:0:4"
             },
-            "scope": 684,
+            "scope": 842,
             "src": "796:130:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 685,
+        "scope": 843,
         "src": "504:424:4"
       }
     ],
@@ -1287,7 +1287,7 @@
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-10-28T16:47:25.787Z",
+  "updatedAt": "2019-10-29T19:06:27.035Z",
   "devdoc": {
     "details": "Very simple ERC20 Token example, where all tokens are pre-assigned to the creator. Note they can later distribute these tokens as they wish using `transfer` and other `ERC20` functions.",
     "methods": {

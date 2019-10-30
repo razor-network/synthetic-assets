@@ -112,6 +112,23 @@ export const mint = async (jobId, value) => {
     tx: res.transactionHash
   }
 }
+export const transfer = async (erc20Address, address, value) => {
+  value = new BigNumber(value).times(_1e18)
+  value = value.toFixed()
+  console.log('valllllue', value)
+  // value = new web3.utils.BN(value)
+
+  // value = _1e18.mul(value)
+  const accounts = await web3.eth.getAccounts()
+  const SimpleToken = new web3.eth.Contract(SimpleTokenBuild.abi, erc20Address)
+
+  const res = await SimpleToken.methods.transfer(address, value).send({
+  from: accounts[0]})
+
+  return {
+    tx: res.transactionHash
+  }
+}
 
 export const draw = async (jobId, value) => {
   // amount = String(Number(amount) * 1000000000000000000)

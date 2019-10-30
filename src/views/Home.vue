@@ -1,14 +1,14 @@
 <template>
     <div>
-  <div class="mb-5">
-    <div class="row row-space-4">
-        <div class="col-xl-3 col-lg-6 mb-4">
+  <div class="mb-6">
+    <div class="row row-space-6">
+        <div class="col-xl-6 col-lg-6 mb-4">
           <div class="row">
-            <h1 >Datafeed</h1>
+            <h3 >Please select a datafeed</h3>
             <p> Note: Please select Göerli testnet in metamask. </p>
             <select v-model="selected" @change="refresh()" class="form-control">
               <option disabled selected :value="null">Select a datafeed</option>
-              <option v-for="job in jobs" :value="job.id" :key="job.id">{{ job.url }}</option>
+              <option v-for="job in jobs" :value="job.id" :key="job.id">{{ job.name }}</option>
             </select>
           </div>
         </div>
@@ -28,7 +28,8 @@
 
         <label :class="{none: isHovering2|| isHovering3}">Asset ID</label>
         <p class="lead"
-            @mouseover="isHovering1 = true"
+            @mouseover="isHovering1 = true;
+            info='This is the asset ID unique to the URL and the selector'"
             @mouseout="isHovering1 = false"
             :class="{hi: !isHovering1, none: isHovering2|| isHovering3}"
             >
@@ -38,7 +39,8 @@
       <div class="col-md-4">
         <label :class="{none: isHovering1|| isHovering3}">CDP ID</label>
         <p class="lead"
-            @mouseover="isHovering2 = true"
+            @mouseover="isHovering2 = true;
+            info='This is the CDP ID unique to the asset and your Ethereum address'"
             @mouseout="isHovering2 = false"
             :class="{hi: !isHovering2, none: isHovering1 || isHovering3}">
             {{cdpId}}</p>
@@ -46,12 +48,20 @@
       <div class="col-md-4" v-if="erc20Address && erc20Address !== ZEROX">
         <label :class="{none: isHovering2|| isHovering1}">ERC20 Contract Address</label>
         <p class="lead"
-            @mouseover="isHovering3 = true"
-            @mouseout="isHovering3 = false"
-            :class="{hi: !isHovering3, none: isHovering1 || isHovering2}">
-            {{erc20Address}}</p>
+           @mouseover="isHovering3 = true;
+        info='This is the ERC20 token contract address for this asset'"
+        @mouseout="isHovering3 = false"
+        :class="{hi: !isHovering3, none: isHovering1 || isHovering2}"
+        ><a
+        target="_blank"
+
+            :href="'https://goerli.etherscan.io/address/'+erc20Address">
+            {{erc20Address}}</a> </p>
       </div>
     </div>
+    <div class="alert alert-info" role="alert" :class="{invisible: !(isHovering1 || isHovering2 || isHovering3)}">
+{{info}}    </div>
+
 
     <div class="row row-space-4">
       <div class="col-md-3" v-if="valueOnChainInEthString">
@@ -91,50 +101,39 @@
     </div>
 
     <div class="row row-space-4" v-if="valueOnChainInEthString">
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="card">
           <div class="card-body">
             <h4 class="mb-4">Mint</h4>
-
+<p>Collateralize with Ether to mint the asset. Asset will be minted with 500% collateral ratio by default.</p>
             <div class="mb-4">
               <label>ETH</label>
               <input class="form-control" v-model="eth" type="number">
             </div>
-
+<p v-if="expected">Tokens to be minted: {{expected}} </p>
             <button class="btn btn-block btn-primary" @click="mint">Mint</button>
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="card">
           <div class="card-body">
-            <h4 class="mb-4">Add collateral</h4>
-
+            <h4 class="mb-4">Transfer</h4>
+<p>Transfer tokens</p>
             <div class="mb-4">
-              <label>ETH</label>
-              <input class="form-control" v-model="addEth" type="number">
+              <label>Address</label>
+              <input class="form-control" v-model="transferAddress" type="text">
             </div>
-
-            <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="mb-4">Draw</h4>
-
             <div class="mb-4">
-                <p>Mint more tokens and increase debt</p>
               <label>Amount</label>
-              <input class="form-control" v-model="drawAmount" type="number">
+              <input class="form-control" v-model="transferAmount" type="number">
             </div>
 
-            <button class="btn btn-block btn-primary" @click="draw">Draw</button>
+            <button class="btn btn-block btn-primary" @click="transfer">Transfer</button>
           </div>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="card">
           <div class="card-body">
             <h4 class="mb-4">Burn</h4>
@@ -148,6 +147,37 @@
           </div>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4">Add collateral</h4>
+<p> Add more collateral to the CDP. If the Collateral ratio drops below 200%, it may be liquidated.
+            <div class="mb-4">
+              <label>ETH</label>
+              <input class="form-control" v-model="addEth" type="number">
+            </div>
+
+            <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="mb-4">Draw</h4>
+
+            <div class="mb-4">
+                <p>Mint more tokens and increase debt without adding collateral.</p>
+              <label>Amount</label>
+              <input class="form-control" v-model="drawAmount" type="number">
+            </div>
+
+            <button class="btn btn-block btn-primary" @click="draw">Draw</button>
+          </div>
+        </div>
+      </div>
+
+
       <!-- <div class="col-md-4 overlay-disabled">
         <div class="card">
           <div class="card-body">
@@ -163,16 +193,18 @@
       <div class="col-md-12">
         <div class="p-4">
           <img src="@/assets/img/hello.svg" class="img-fluid">
+          <!-- <div class="footer"> (c) 2019 All rights reserved </div> -->
         </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
 // import Web3 from 'web3'
 import BN from 'bignumber.js'
-import { enableEth, read, mint, draw, collateralize, cdps, balanceOf, burn,
+import { enableEth, read, mint, draw, collateralize, transfer, cdps, balanceOf, burn,
   getContractAddress, cdpId, getAssetId, liquidate } from '@/utils/commons'
 
 const ZEROX = '0x0000000000000000000000000000000000000000'
@@ -213,10 +245,18 @@ export default {
       ratio: null,
       isHovering1: false,
       isHovering2: false,
-      isHovering3: false
+      isHovering3: false,
+      info: "test",
+      transferAmount: null,
+      transferAddress: null
+      // expected: null
     }
   },
   computed: {
+    expected: function() {
+        if(!this.eth) return
+        return this.eth/(5*this.valueOnChainInEth)
+    },
 
     debtString: function () {
       if (!this.debt) return
@@ -255,12 +295,21 @@ export default {
     this.getJobs()
   },
   methods: {
+      transfer: async function() {
+          const { tx } = await transfer(this.erc20Address, this.transferAddress, this.transferAmount)
+
+          this.tx = tx
+
+          this.refresh()
+      },
     getJobs: async function () {
       let data = await this.axios.get('https://api.razor.network/' + 'jobs')
+      // let data = await this.axios.get('http://localhost:3000/' + 'jobs')
       for (let i = 0; i < data.data.message.length; i++) {
         this.jobs.push({
           'url': data.data.message[i].url,
-          'id': data.data.message[i].id
+          'id': data.data.message[i].id,
+          'name': data.data.message[i].name
         })
       }
     },
@@ -355,5 +404,8 @@ export default {
 
 .none {
     display: none;
+}
+.invisible {
+    display: hidden;
 }
 </style>
