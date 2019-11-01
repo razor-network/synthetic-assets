@@ -62,7 +62,7 @@ Please select Göerli testnet in metamask to continue.
       </div>
 
 <div v-if="showInfo" >
-    <div class="row row-space-4" v-if="assetId">
+    <div class="row" v-if="assetId">
       <div class="col-md-2 card-body">
 
         <label :class="{none: isHovering2|| isHovering3 || isHovering4 || isHovering5 || isHovering6}">Asset ID</label>
@@ -104,7 +104,10 @@ Please select Göerli testnet in metamask to continue.
         info='This is the URL from which the data will be fetched by Razor Oracle Network'"
         @mouseout="isHovering4 = false"
         :class="{hi: !isHovering4, none: isHovering1 || isHovering2 || isHovering3 || isHovering5 || isHovering6}"
-        >{{selected.url}} </p>
+        ><a :href="selected.url"
+        target="_blank"
+        >{{selected.url}} </a>
+    </p>
       </div>
       <div class="col-md-2 card-body" v-if="selected">
         <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering6}">Selector</label>
