@@ -9,18 +9,16 @@
             <h3 > Welcome to Razor Synthetic Assets</h3>
 
             <p class='lead'> Using this dapp you can "mint" tokens which tracks any asset in the world.</p>
-            <p> It uses <a target="_blank" href="https://razor.network"> Razor Oracle Network</a> to get the data.</p>
-            <p> Please select an asset below or add your own datafeed here: <a target="_blank" href = 'https://razorscan.io/#/query'>RazorScan</a> </p>
+            <p> It uses <a class="font-weight-bold" target="_blank" href="https://razor.network"> Razor Decentralized Oracle Network</a> to get the data.</p>
+            <p> Please select an asset below or add your own datafeed here: <a class="font-weight-bold" target="_blank" href = 'https://razorscan.io/#/query'>RazorScan</a> </p>
             <p><strong> Note: This is a demo application deployed on Görli testnet. Please don't send valuable assets!</strong></p>
-            <p><strong> You will need some Göerli ether to use the app. Get some <a target="_blank" href='https://goerli-faucet.slock.it/'>here</a> </strong></p>
-<br/>
+            <p><strong> You will need some Göerli ether to use the app. Get some <a target="_blank" class="font-weight-bold" href='https://goerli-faucet.slock.it/'>here</a> </strong></p>
+
             <h3> How to open a short position</h3>
             <p> Creating a CDP using this app backed by Ether will mint the synthetic tokens. You can sell these ERC20 tokens to anyone to open a "short" position </p>
-            <br/>
 
             <h3> How to open a long position </h3>
             <p> Buy the synthetic ERC20 tokens from anyone to open a long position. </p>
-            <br/>
             <h3> What is the minimum collateral ratio </h3>
             <p>Minimum collateral ratio is 200%, below which the CDP may be liquidated. </p>
             <div class="alert alert-danger" v-if="warning" role="alert">
@@ -28,7 +26,7 @@ Please select Göerli testnet in metamask to continue.
 </div>
 <div v-if="!warning">
             <h3>Please select an Asset</h3>
-            <p><strong> Note: These are all the datafeeds from Razor oracle network, which is decentralized. We do not have control over the datafeeds. </strong></p>
+            <p><strong> Note: These are all the datafeeds from Razor oracle network, which is decentralized. We do not have control over the datafeeds. We will assume the values are in USD. </strong></p>
 
             <select v-model="selected" @change="refresh()" class="form-control mb-30">
               <option disabled selected :value="null">Select</option>
@@ -119,14 +117,14 @@ Please select Göerli testnet in metamask to continue.
             {{selected.selector}} </p>
       </div>
       <div class="col-md-2 card-body" v-if="selected">
-        <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering5}">Last price</label>
+        <label :class="{none:  isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering5}">Job ID</label>
         <p class="lead singleLine"
            @mouseover="isHovering6 = true;
-        info='Last reported price by the Razor Oracle Network'"
+        info='The datafeed ID from Razor Oracle Network'"
         @mouseout="isHovering6 = false"
         :class="{hi: !isHovering5, none: isHovering1|| isHovering2 || isHovering3 || isHovering4 || isHovering5}"
         >
-            {{selected.result}} </p>
+            {{selected.id}} </p>
       </div>
     </div>
 </div>
