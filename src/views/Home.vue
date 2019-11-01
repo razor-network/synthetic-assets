@@ -184,7 +184,7 @@ Please select Göerli testnet in metamask to continue.
           <h4 class="display-4">
             {{collateralString.first}}<small class="text-muted">{{collateralString.second}}          </small> </h4>
  <h4 class="display-5 text-muted">ETH </h4>
- <h4><small class="display-5 text-muted" v-if="ratioString">({{ratioString}}%)</small></small></h4>
+ <h4><small class="display-5 text-muted" v-if="ratioString">Collateral ratio: {{ratioString}}%</small></small></h4>
         </div>
     </div>
     </div>
@@ -218,7 +218,10 @@ Please select Göerli testnet in metamask to continue.
               <input class="form-control" v-model="eth" type="number">
             </div>
 <p v-if="expected">Tokens to be minted: {{expected}} </p>
-            <button class="btn btn-block btn-primary" @click="mint">Mint</button>
+            <button class="btn btn-block btn-primary" type="button" @click="mint" :disabled="mintLoading">
+                <span class="spinner-border spinner-border-sm" role="status" v-if="mintLoading" aria-hidden="true"></span>
+Mint</button>
+
           </div>
 
       </div>
@@ -233,7 +236,9 @@ Please select Göerli testnet in metamask to continue.
               <!-- <input class="form-control" v-model="tokens" type="number"> -->
             <!-- </div> -->
 
-            <button class="btn btn-block btn-primary" @click="burn">Burn</button>
+            <button class="btn btn-block btn-primary" @click="burn" :disabled="burnLoading">
+                <span class="spinner-border spinner-border-sm" role="status" v-if="burnLoading" aria-hidden="true"></span>
+Burn</button>
         </div>
       </div>
   </div>
@@ -250,7 +255,10 @@ Please select Göerli testnet in metamask to continue.
             </div>
             <div v-if="CRafterCollateralized" >Future collateral Ratio: {{CRafterCollateralized}} % </div>
 <br/>
-            <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
+            <button class="btn btn-block btn-primary" @click="collateralize" :disabled="collateralizeLoading">
+                <span class="spinner-border spinner-border-sm" role="status" v-if="collateralizeLoading" aria-hidden="true"></span>
+
+Collateralize</button>
           </div>
         </div>
 
@@ -266,7 +274,10 @@ Please select Göerli testnet in metamask to continue.
             </div>
             <div v-if="CRafterDraw" :class="{red: CRafterDraw<200}" >Future collateral Ratio: {{CRafterDraw}} % </div>
 <br/>
-            <button class="btn btn-block btn-primary" @click="draw">Draw</button>
+            <button class="btn btn-block btn-primary" @click="draw" :disabled="drawLoading">
+                <span class="spinner-border spinner-border-sm" role="status" v-if="drawLoading" aria-hidden="true"></span>
+
+                Draw</button>
           </div>
 
       </div>
@@ -283,7 +294,9 @@ Please select Göerli testnet in metamask to continue.
               <input class="form-control" v-model="transferAmount" type="number">
             </div>
 
-            <button class="btn btn-block btn-primary" @click="transfer">Transfer</button>
+            <button class="btn btn-block btn-primary" @click="transfer" :disabled="transferLoading">
+                <span class="spinner-border spinner-border-sm" role="status" v-if="transferLoading" aria-hidden="true"></span>
+Transfer</button>
           </div>
 
       </div>
@@ -360,7 +373,12 @@ export default {
       showInfo: false,
       show: false,
       warning: null,
-      ethPrice: null
+      ethPrice: null,
+      mintLoading: false,
+      burnLoading: false,
+      collateralizeLoading: false,
+      drawLoading: false,
+      transferLoading: false
       // expected: null
     }
   },
@@ -435,9 +453,11 @@ export default {
   },
   methods: {
       transfer: async function() {
+          this.transferLoading = true
           const { tx } = await transfer(this.erc20Address, this.transferAddress, this.transferAmount)
 
           this.tx = tx
+          this.transferLoading = false
 
           this.refresh()
       },
@@ -493,32 +513,46 @@ export default {
       this.show = false
     },
     mint: async function () {
+        this.mintLoading = true
+
       const { tx } = await mint(this.selected.id, this.eth)
 
       this.tx = tx
 
-      this.refresh()
+      this.mintLoading = false
+
+      await this.refresh()
+
     },
     draw: async function () {
+        this.drawLoading = true
+
       const { tx } = await draw(this.selected.id, this.drawAmount)
 
       this.tx = tx
 
+this.drawLoading = false
       this.refresh()
     },
     collateralize: async function () {
+        this.collateralizeLoading = true
+
       const { tx } = await collateralize(this.selected.id, this.addEth)
 
       this.tx = tx
-
+this.collateralizeLoading = false
       this.refresh()
     },
     burn: async function () {
-      await burn(this.selected.id, this.erc20Address)
+        this.burnLoading = true
 
+      await burn(this.selected.id, this.erc20Address)
+this.burnLoading = false
       this.refresh()
     },
     liquidate: async function () {
+        // this.show = true
+
       await liquidate(this.cdpId)
 
       this.refresh()
