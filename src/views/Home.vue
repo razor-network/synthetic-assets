@@ -11,17 +11,15 @@
             <p class='lead'> Using this dapp you can "mint" tokens which tracks any asset in the world.</p>
             <p> It uses <a target="_blank" href="https://razor.network"> Razor Oracle Network</a> to get the data.</p>
             <p> Please select an asset below or add your own datafeed here: <a target="_blank" href = 'https://razorscan.io/#/query'>RazorScan</a> </p>
-            <p><strong> Note: This is a demo application deployed on Görli testnet. Please don't send valuable assets! </strong></p>
+            <p><strong> Note: This is a demo application deployed on Görli testnet. Please don't send valuable assets!</strong></p>
             <p><strong> You will need some Göerli ether to use the app. Get some <a target="_blank" href='https://goerli-faucet.slock.it/'>here</a> </strong></p>
-<br/>
 <br/>
             <h3> How to open a short position</h3>
             <p> Creating a CDP using this app backed by Ether will mint the synthetic tokens. You can sell these ERC20 tokens to anyone to open a "short" position </p>
             <br/>
-            <br/>
+
             <h3> How to open a long position </h3>
             <p> Buy the synthetic ERC20 tokens from anyone to open a long position. </p>
-            <br/>
             <br/>
             <h3> What is the minimum collateral ratio </h3>
             <p>Minimum collateral ratio is 200%, below which the CDP may be liquidated. </p>
@@ -30,6 +28,8 @@ Please select Göerli testnet in metamask to continue.
 </div>
 <div v-if="!warning">
             <h3>Please select an Asset</h3>
+            <p><strong> Note: These are all the datafeeds from Razor oracle network, which is decentralized. We do not have control over the datafeeds. </strong></p>
+
             <select v-model="selected" @change="refresh()" class="form-control mb-30">
               <option disabled selected :value="null">Select</option>
               <option v-for="job in jobs" :value="job" :key="job.id">{{ job.name }}</option>
@@ -45,7 +45,7 @@ Please select Göerli testnet in metamask to continue.
             </div>
           </div>
         </div>
-        <div class = "row mb-30">
+        <div class = "row p-2 mb-30">
             <div class ="col-md-2" ><button class = 'btn btn-secondary' v-if="assetId && !showInfo" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Show Details </button>
             <button class = 'btn btn-secondary' v-if="assetId && showInfo" @model="showInfo" @click="showInfo = !showInfo"> <font-awesome-icon icon="info-circle" /> Hide Details </button>
 </div>
@@ -134,45 +134,81 @@ Please select Göerli testnet in metamask to continue.
 {{info}}    </div>
 
 
-    <div class="row row-space-4">
+    <div class="row p-2  d-flex flex-row align-items-stretch">
       <div class="col-md-3" v-if="valueOnChainInEthString">
         <div class="card ">
           <div class="card-body">
-            <p class="lead">Asset Value</p>
-            <h4 class="m-0">{{valueOnChainInEthString.first}}<small class="text-muted">{{valueOnChainInEthString.second}} <small>ETH</small></small></h4>
+            <p class="card-title">{{selected.name}} Price</p>
+            <h4>{{assetPriceString.first}}<small class="text-muted">{{assetPriceString.second}} </small></h4>
+            <p class="card-subtitle text-muted">USD</p>
           </div>
+        </div>
+      </div>
+      <div class="col-md-3" v-if="valueOnChainInEthString">
+        <div class="card ">
+          <div class="card-body">
+            <p class="card-title">ETH/USD price</p>
+            <h4 class>{{ethPriceString.first}}<small class="text-muted">{{ethPriceString.second}} </small></h4>
+            <p class="card-subtitle text-muted">USD</p>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3" v-if="valueOnChainInEthString">
+        <div class="card ">
+          <div class="card-body">
+            <p class="card-title">{{selected.name}} Price in ETH</p>
+            <h4 >{{valueOnChainInEthString.first}}<small class="text-muted">{{valueOnChainInEthString.second}} </small></h4>
+
+            <p class="card-subtitle text-muted">ETH</p>
+ </div>
         </div>
       </div>
       <div class="col-md-3" v-if="userErc20BalanceString">
         <div class="card">
           <div class="card-body">
-            <p class="lead">Your Balance</p>
-            <h4 class="m-0">{{userErc20BalanceString.first}}<small class="text-muted">{{userErc20BalanceString.second}} <small>{{selected.name}}</small></small></h4>
-          </div>
+            <p class="card-title">Your Balance</p>
+            <h4 >{{userErc20BalanceString.first}}<small class="text-muted">{{userErc20BalanceString.second}}</small></h4>
+            <p class="card-subtitle text-muted">{{selected.name}}</p>
+ </div>
         </div>
       </div>
-      <div class="col-md-3" v-if="debtString">
-        <div class="card">
-          <div class="card-body">
-            <p class="lead">Debt</p>
-            <h4 class="m-0">{{debtString.first}}<small class="text-muted">{{debtString.second}} <small>{{selected.name}}</small></small></h4>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3" v-if="collateralString">
-        <div class="card">
-          <div class="card-body">
-            <p class="lead">Collateral</p>
-            <h4 class="m-0">
-              {{collateralString.first}}<small class="text-muted">{{collateralString.second}} <small>ETH <span v-if="ratioString">({{ratioString}}%)</span></small></small>
-            </h4>
-          </div>
-        </div>
-      </div>
-    </div>
 
+    </div>
+    <div class = "row p-2">
+    <div class="col-md-6 " v-if="collateralString">
+        <div class="card">
+        <div class="card-body">
+          <p class="display-5 strong">Collateral</p>
+          <h4 class="display-4">
+            {{collateralString.first}}<small class="text-muted">{{collateralString.second}}          </small> </h4>
+ <h4 class="display-5 text-muted">ETH </h4>
+ <h4><small class="display-5 text-muted" v-if="ratioString">({{ratioString}}%)</small></small></h4>
+        </div>
+    </div>
+    </div>
+    <div class="col-md-6" v-if="debtString">
+        <div class="card">
+        <div class="card-body">
+          <p class="display-5">Debt</p>
+          <h4 class="display-4">{{debtString.first}}<small class="text-muted">{{debtString.second}} </small></h4>
+             <h4> <small class="display-5 text-muted" v-if="ratioString">{{selected.name}}</small></h4>
+             <h4> <small class="invisible" v-if="ratioString">.</small></h4>
+        </div>
+        </div>
+    </div>
+</div>
+
+        <!-- <nav class="nav nav-pills nav-justified p-4"  v-if="valueOnChainInEthString">
+          <a class="nav-item nav-link active" href="#">Mint</a>
+          <a class="nav-item nav-link" href="#">Burn</a>
+          <a class="nav-item nav-link" href="#">Collateralize</a>
+          <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Draw</a>
+          <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Transfer</a>
+        </nav> -->
     <div class="row  d-flex p-4 flex-row align-items-stretch" v-if="valueOnChainInEthString">
-        <div class="col-md-4 card">
+
+        <div class="col-md-6 card">
           <div class="card-body">
             <h4 class="mb-4">Mint</h4>
 <p>Collateralize with Ether to mint the asset. Asset will be minted with 500% collateral ratio by default.</p>
@@ -182,6 +218,54 @@ Please select Göerli testnet in metamask to continue.
             </div>
 <p v-if="expected">Tokens to be minted: {{expected}} </p>
             <button class="btn btn-block btn-primary" @click="mint">Mint</button>
+          </div>
+
+      </div>
+
+
+      <div class="col-md-6 card ">
+          <div class="card-body">
+            <h4 class="mb-4">Burn</h4>
+
+            <!-- <div class="mb-4"> -->
+              <label>Pay whole debt and close CDP</label>
+              <!-- <input class="form-control" v-model="tokens" type="number"> -->
+            <!-- </div> -->
+
+            <button class="btn btn-block btn-primary" @click="burn">Burn</button>
+        </div>
+      </div>
+  </div>
+  <div class="row  d-flex p-4 flex-row align-items-stretch " v-if="valueOnChainInEthString">
+
+      <div class="col-md-4 card ">
+
+          <div class="card-body">
+            <h4 class="mb-4">Add collateral</h4>
+<p> Add more collateral to the CDP.
+            <div class="mb-4">
+              <label>ETH</label>
+              <input class="form-control" v-model="addEth" type="number">
+            </div>
+            <div v-if="CRafterCollateralized" >Future collateral Ratio: {{CRafterCollateralized}} % </div>
+<br/>
+            <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
+          </div>
+        </div>
+
+        <div class="col-md-4 card ">
+
+          <div class="card-body">
+            <h4 class="mb-4">Draw</h4>
+
+            <div class="mb-4">
+                <p>Mint more tokens and increase debt without adding collateral.  If the Collateral ratio drops below 200%, it may be liquidated.</p>
+              <label>Amount</label>
+              <input class="form-control" v-model="drawAmount" type="number">
+            </div>
+            <div v-if="CRafterDraw" :class="{red: CRafterDraw<200}" >Future collateral Ratio: {{CRafterDraw}} % </div>
+<br/>
+            <button class="btn btn-block btn-primary" @click="draw">Draw</button>
           </div>
 
       </div>
@@ -199,53 +283,6 @@ Please select Göerli testnet in metamask to continue.
             </div>
 
             <button class="btn btn-block btn-primary" @click="transfer">Transfer</button>
-          </div>
-
-      </div>
-
-      <div class="col-md-4 card ">
-          <div class="card-body">
-            <h4 class="mb-4">Burn</h4>
-
-            <!-- <div class="mb-4"> -->
-              <label>Pay whole debt and close CDP</label>
-              <!-- <input class="form-control" v-model="tokens" type="number"> -->
-            <!-- </div> -->
-
-            <button class="btn btn-block btn-primary" @click="burn">Burn</button>
-        </div>
-      </div>
-  </div>
-  <div class="row  d-flex p-4 flex-row align-items-stretch " v-if="valueOnChainInEthString">
-
-      <div class="col-md-6 card ">
-
-          <div class="card-body">
-            <h4 class="mb-4">Add collateral</h4>
-<p> Add more collateral to the CDP.
-            <div class="mb-4">
-              <label>ETH</label>
-              <input class="form-control" v-model="addEth" type="number">
-            </div>
-            <div v-if="CRafterCollateralized" >Future collateral Ratio: {{CRafterCollateralized}} % </div>
-<br/>
-            <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
-          </div>
-        </div>
-
-        <div class="col-md-6 card ">
-
-          <div class="card-body">
-            <h4 class="mb-4">Draw</h4>
-
-            <div class="mb-4">
-                <p>Mint more tokens and increase debt without adding collateral.  If the Collateral ratio drops below 200%, it may be liquidated.</p>
-              <label>Amount</label>
-              <input class="form-control" v-model="drawAmount" type="number">
-            </div>
-            <div v-if="CRafterDraw" :class="{red: CRafterDraw<200}" >Future collateral Ratio: {{CRafterDraw}} % </div>
-<br/>
-            <button class="btn btn-block btn-primary" @click="draw">Draw</button>
           </div>
 
       </div>
@@ -321,7 +358,8 @@ export default {
       transferAddress: null,
       showInfo: false,
       show: false,
-      warning: null
+      warning: null,
+      ethPrice: null
       // expected: null
     }
   },
@@ -356,6 +394,16 @@ export default {
       if (isNaN(this.ratio)) return
 
       return Math.round(this.ratio * 10000, 4) / 100
+  },
+  ethPriceString: function() {
+      if (!this.ethPrice) return
+
+      return splitNum(this.ethPrice)
+  },
+  assetPriceString: function() {
+      if (!this.selected.result) return
+
+      return splitNum(this.selected.result)
   },
     CRafterCollateralized: function() {
         if (!this.ratio) return
@@ -432,8 +480,8 @@ export default {
       await this.updateCdpInfo()
       let res = await read(this.selected.id) / 100000000
       console.log(res)
-      let ethPrice = await read(1) / 100000000
-      this.valueOnChainInEth = res / ethPrice
+      this.ethPrice = await read(1) / 100000000
+      this.valueOnChainInEth = res / this.ethPrice
 
       this.erc20Address = await getContractAddress(this.assetId)
       //

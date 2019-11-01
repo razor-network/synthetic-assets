@@ -14,10 +14,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueElementLoading from 'vue-element-loading'
 import VueAnalytics from 'vue-analytics'
 
+Vue.config.productionTip = false
+
 Vue.use(VueAnalytics, {
   id: 'UA-143423314-3'
 })
-Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)
 Vue.use(Plugin)
