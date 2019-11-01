@@ -12,7 +12,11 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faInfoCircle, faSync } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueElementLoading from 'vue-element-loading'
+import VueAnalytics from 'vue-analytics'
 
+Vue.use(VueAnalytics, {
+  id: 'UA-143423314-3'
+})
 Vue.config.productionTip = false
 
 Vue.use(VueAxios, axios)

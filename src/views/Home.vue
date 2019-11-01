@@ -8,11 +8,11 @@
           <!-- <div class="row"> -->
             <h3 > Welcome to Razor Synthetic Assets</h3>
 
-            <p> Using this dapp you can "mint" tokens which tracks any asset in the world.</p>
+            <p class='lead'> Using this dapp you can "mint" tokens which tracks any asset in the world.</p>
             <p> It uses <a target="_blank" href="https://razor.network"> Razor Oracle Network</a> to get the data.</p>
             <p> Please select an asset below or add your own datafeed here: <a target="_blank" href = 'https://razorscan.io/#/query'>RazorScan</a> </p>
-            <b> Note: This is a demo application deployed on Görli testnet. Please don't send valuable assets! </b>
-            <b> You will need some Göerli ether to use the app. Get some <a target="_blank" href='https://goerli-faucet.slock.it/'>here</a> </b>
+            <p><strong> Note: This is a demo application deployed on Görli testnet. Please don't send valuable assets! </strong></p>
+            <p><strong> You will need some Göerli ether to use the app. Get some <a target="_blank" href='https://goerli-faucet.slock.it/'>here</a> </strong></p>
 <br/>
 <br/>
             <h3> How to open a short position</h3>
@@ -135,8 +135,8 @@ Please select Göerli testnet in metamask to continue.
 
 
     <div class="row row-space-4">
-      <div class="col-md-3 mb-50" v-if="valueOnChainInEthString">
-        <div class="card">
+      <div class="col-md-3" v-if="valueOnChainInEthString">
+        <div class="card ">
           <div class="card-body">
             <p class="lead">Asset Value</p>
             <h4 class="m-0">{{valueOnChainInEthString.first}}<small class="text-muted">{{valueOnChainInEthString.second}} <small>ETH</small></small></h4>
@@ -171,9 +171,8 @@ Please select Göerli testnet in metamask to continue.
       </div>
     </div>
 
-    <div class="row " v-if="valueOnChainInEthString">
-      <div class="col-md-4 ">
-        <div class="card ">
+    <div class="row  d-flex p-4 flex-row align-items-stretch" v-if="valueOnChainInEthString">
+        <div class="col-md-4 card">
           <div class="card-body">
             <h4 class="mb-4">Mint</h4>
 <p>Collateralize with Ether to mint the asset. Asset will be minted with 500% collateral ratio by default.</p>
@@ -184,10 +183,9 @@ Please select Göerli testnet in metamask to continue.
 <p v-if="expected">Tokens to be minted: {{expected}} </p>
             <button class="btn btn-block btn-primary" @click="mint">Mint</button>
           </div>
-        </div>
+
       </div>
-      <div class="col-md-4 ">
-        <div class="card ">
+      <div class="col-md-4 card ">
           <div class="card-body">
             <h4 class="mb-4">Transfer</h4>
 <p>Transfer tokens</p>
@@ -202,11 +200,10 @@ Please select Göerli testnet in metamask to continue.
 
             <button class="btn btn-block btn-primary" @click="transfer">Transfer</button>
           </div>
-        </div>
+
       </div>
 
-      <div class="col-md-4 mb-auto">
-        <div class="card ">
+      <div class="col-md-4 card ">
           <div class="card-body">
             <h4 class="mb-4">Burn</h4>
 
@@ -216,17 +213,16 @@ Please select Göerli testnet in metamask to continue.
             <!-- </div> -->
 
             <button class="btn btn-block btn-primary" @click="burn">Burn</button>
-          </div>
         </div>
       </div>
   </div>
-  <div class="row " v-if="valueOnChainInEthString">
+  <div class="row  d-flex p-4 flex-row align-items-stretch " v-if="valueOnChainInEthString">
 
-      <div class="col-md-6">
-        <div class="card">
+      <div class="col-md-6 card ">
+
           <div class="card-body">
             <h4 class="mb-4">Add collateral</h4>
-<p> Add more collateral to the CDP. If the Collateral ratio drops below 200%, it may be liquidated.
+<p> Add more collateral to the CDP.
             <div class="mb-4">
               <label>ETH</label>
               <input class="form-control" v-model="addEth" type="number">
@@ -236,14 +232,14 @@ Please select Göerli testnet in metamask to continue.
             <button class="btn btn-block btn-primary" @click="collateralize">Collateralize</button>
           </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card">
+
+        <div class="col-md-6 card ">
+
           <div class="card-body">
             <h4 class="mb-4">Draw</h4>
 
             <div class="mb-4">
-                <p>Mint more tokens and increase debt without adding collateral.</p>
+                <p>Mint more tokens and increase debt without adding collateral.  If the Collateral ratio drops below 200%, it may be liquidated.</p>
               <label>Amount</label>
               <input class="form-control" v-model="drawAmount" type="number">
             </div>
@@ -251,7 +247,7 @@ Please select Göerli testnet in metamask to continue.
 <br/>
             <button class="btn btn-block btn-primary" @click="draw">Draw</button>
           </div>
-        </div>
+
       </div>
   </div>
 
@@ -445,7 +441,7 @@ export default {
       const x = (new BN(this.debt).multipliedBy(this.valueOnChainInEth)).dividedBy(this.collateral)
       this.ratio = 1 / x
       await this.updateUserBalance()
-      this.show=false
+      this.show = false
     },
     mint: async function () {
       const { tx } = await mint(this.selected.id, this.eth)
