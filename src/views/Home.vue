@@ -6,7 +6,7 @@
     <div class="row row-space-12">
         <div class="col-xl-6 col-lg-6 mb-4">
           <!-- <div class="row"> -->
-            <h3 > Welcome to Razor Synthetic Assets</h3>
+            <h3 > Welcome to Razor Synths</h3>
 
             <p class='lead'> Using this dapp you can "mint" tokens which tracks any asset in the world.</p>
             <p> It uses <a class="font-weight-bold" target="_blank" href="https://razor.network"> Razor Decentralized Oracle Network</a> to get the data.</p>
@@ -14,13 +14,11 @@
             <p><strong> Note: This is a demo application deployed on Görli testnet. Please don't send valuable assets!</strong></p>
             <p><strong> You will need some Göerli ether to use the app. Get some <a target="_blank" class="font-weight-bold" href='https://goerli-faucet.slock.it/'>here</a> </strong></p>
 
-            <h3> How to open a short position</h3>
+            <h3> How to open a short position?</h3>
             <p> Creating a CDP using this app backed by Ether will mint the synthetic tokens. You can sell these ERC20 tokens to anyone to open a "short" position </p>
 
-            <h3> How to open a long position </h3>
+            <h3> How to open a long position? </h3>
             <p> Buy the synthetic ERC20 tokens from anyone to open a long position. </p>
-            <h3> What is the minimum collateral ratio </h3>
-            <p>Minimum collateral ratio is 200%, below which the CDP may be liquidated. </p>
             <div class="alert alert-danger" v-if="warning" role="alert">
 Please select Göerli testnet in metamask to continue.
 </div>

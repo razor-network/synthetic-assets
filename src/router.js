@@ -21,6 +21,18 @@ export default new Router({
           meta: { title: 'Home' }
         }
       ]
-    }
+  },
+  {
+    path: '/FAQ',
+    component: Base,
+    children: [
+      {
+        path: '',
+        name: 'home',
+        component: () => import('./views/FAQ'),
+        meta: { title: 'FAQ' }
+      }
+    ]
+  }
   ]
 })

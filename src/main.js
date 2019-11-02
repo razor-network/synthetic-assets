@@ -10,6 +10,7 @@ import Plugin from './plugins/Plugin'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faInfoCircle, faSync } from '@fortawesome/free-solid-svg-icons'
+import { faTelegramPlane, faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueElementLoading from 'vue-element-loading'
 import VueAnalytics from 'vue-analytics'
@@ -24,6 +25,8 @@ Vue.use(VueAxios, axios)
 Vue.use(Plugin)
 
 library.add(faInfoCircle)
+library.add(faTelegramPlane)
+library.add(faGithub)
 library.add(faSync)
 
 Vue.component('VueElementLoading', VueElementLoading)
