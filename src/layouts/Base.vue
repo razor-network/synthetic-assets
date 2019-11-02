@@ -1,66 +1,72 @@
 <template>
-  <div class="app-base">
-    <!-- <div class="top-bar"> -->
-        <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-our container d-flex ">
-            <div class="brand flex-grow-1 navbar-brand  ">
-                <router-link  to="/">
-              <img src="@/assets/img/logo.svg" height="26px" class="d-inline-block align-top"  /><span class="text-monospace" style="vertical-align: middle; ">Synths</span>
-          </router-link>
-            </div>
-
-                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <!-- <a class="nav-item nav-link active" href="#">Home </a> -->
-      <router-link to="/FAQ" class="nav-item nav-link">
-
-                        <span>FAQ</span>
-                    </router-link>
-      <a class="nav-item nav-link" target="_blank" href="https://razor.network">Oracle</a>
-      <a class="nav-item nav-link" target="_blank" href="https://razorscan.io">Explore</a>
-      <a class="nav-item nav-link" target="_blank" href="https://github.com/razor-network/synthetic-assets"><font-awesome-icon :icon="['fab', 'github']" /> Code</a>
-      <a class="nav-item nav-link" target="_blank" href="https://t.me/razornetwork"><font-awesome-icon :icon="['fab', 'telegram-plane']" /> Help</a>
-
-
+<div class="app-base">
+  <!-- <div class="top-bar"> -->
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-our container d-flex ">
+    <div class="brand flex-grow-1 navbar-brand  ">
+      <router-link to="/">
+        <img src="@/assets/img/logo.svg" height="26px" class="d-inline-block align-top" /><span class="text-monospace" style="vertical-align: middle; ">Synths</span>
+      </router-link>
     </div>
-  </div>
-</nav>
-      <!-- <div class="container d-flex">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <!-- <a class="nav-item nav-link active" href="#">Home </a> -->
+        <router-link to="/App" class="nav-item nav-link">
+          <span>App</span>
+        </router-link>
+        <router-link to="/FAQ" class="nav-item nav-link">
+          <span>FAQ</span>
+        </router-link>
+        <a class="nav-item nav-link" target="_blank" href="https://razor.network">Razor Network</a>
+        <a class="nav-item nav-link" target="_blank" href="https://razorscan.io">RazorScan</a>
+        <a class="nav-item nav-link" target="_blank" href="https://github.com/razor-network/synthetic-assets">
+          <font-awesome-icon :icon="['fab', 'github']" /> Code</a>
+        <a class="nav-item nav-link" target="_blank" href="https://t.me/razornetwork">
+          <font-awesome-icon :icon="['fab', 'telegram-plane']" /> Help</a>
+
+
+      </div>
+    </div>
+  </nav>
+  <!-- <div class="container d-flex">
         <div class="brand">
           <img src="@/assets/img/logo.svg" height="26px">
           <strong>Synthetic Assets</strong>
         </div>
       </div> -->
-    <!-- </div> -->
+  <!-- </div> -->
 
-    <div class="container">
-      <router-view></router-view>
-    </div>
+  <div class="container">
+    <router-view></router-view>
   </div>
+</div>
 </template>
 
 <script>
 import dom from '@/mixins/dom'
-import { EventBus } from '@/utils/commons'
+import {
+  EventBus
+} from '@/utils/commons'
 
 export default {
-  data: function () {
+  data: function() {
     return {
       show: false
     }
   },
-  mixins: [ dom ],
+  mixins: [dom],
   methods: {
-    getMainWindow: function () {
+    getMainWindow: function() {
       if (this.mainWindow) return this.mainWindow
 
       this.mainWindow = document.querySelector('.app-base')
 
       return this.mainWindow
     },
-    checkForScroll: function () {
+    checkForScroll: function() {
       const mainWindow = this.getMainWindow()
       if (!mainWindow) return
 
@@ -72,7 +78,7 @@ export default {
         this.removeClass(document.body, 'scrolled')
       }
     },
-    updateAvailable (e) {
+    updateAvailable(e) {
       const ref = this
 
       this.registration = e.detail
@@ -81,14 +87,14 @@ export default {
       })
       EventBus.$emit('toast:show', 'showSwUpdate')
     },
-    refreshApp () {
+    refreshApp() {
       if (!this.registration || !this.registration.waiting) return
 
       this.userIntentToRefresh = true
       this.registration.waiting.postMessage('SKIP_WAITING')
     }
   },
-  created: function () {
+  created: function() {
     if (window.location.hostname.includes('netlify.com')) {
       this.show = false
       return
@@ -119,7 +125,7 @@ export default {
       }
     )
   },
-  mounted: function () {
+  mounted: function() {
     this.checkForScroll()
 
     document.addEventListener('scroll', (evt) => {
@@ -133,9 +139,10 @@ export default {
 </script>
 <style>
 .bg-our {
-    background: #F0F4F8;
+  background: #F0F4F8;
 }
+
 .brand {
-      text-decoration: none;
+  text-decoration: none;
 }
 </style>
