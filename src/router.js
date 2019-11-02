@@ -28,9 +28,21 @@ export default new Router({
     children: [
       {
         path: '',
-        name: 'home',
+        name: 'faq',
         component: () => import('./views/FAQ'),
         meta: { title: 'FAQ' }
+      }
+    ]
+},
+  {
+    path: '/App',
+    component: Base,
+    children: [
+      {
+        path: '',
+        name: 'app',
+        component: () => import('./views/App'),
+        meta: { title: 'App' }
       }
     ]
   }

@@ -27,10 +27,6 @@
           <!-- <div class="footer"> (c) 2019 All rights reserved </div> -->
         </div>
       </div>
-      <router-link to="/App" class="btn btn-primary text-decoration-none">
-
-                        <span>Let's get started</span>
-                    </router-link>
 
       <div v-if="!warning">
         <h3> Step 1: Get some Göeth </h3>
