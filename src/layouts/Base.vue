@@ -23,7 +23,7 @@
         <a class="nav-item nav-link text-decoration-none font-weight-bold " target="_blank" href="https://razor.network">Razor Network</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://razorscan.io">RazorScan</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://github.com/razor-network/synthetic-assets">
-          <font-awesome-icon :icon="['fab', 'github']" /> Code</a>
+          <font-awesome-icon :icon="['fab', 'github']" /> Source</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://t.me/razornetwork">
           <font-awesome-icon :icon="['fab', 'telegram-plane']" /> Help</a>
 
