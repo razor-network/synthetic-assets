@@ -14,17 +14,17 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <!-- <a class="nav-item nav-link active" href="#">Home </a> -->
-        <router-link to="/App" class="nav-item nav-link">
+        <router-link to="/App" class="nav-item nav-link text-decoration-none font-weight-bold">
           <span>App</span>
         </router-link>
-        <router-link to="/FAQ" class="nav-item nav-link">
+        <router-link to="/FAQ" class="nav-item nav-link text-decoration-none font-weight-bold ">
           <span>FAQ</span>
         </router-link>
-        <a class="nav-item nav-link" target="_blank" href="https://razor.network">Razor Network</a>
-        <a class="nav-item nav-link" target="_blank" href="https://razorscan.io">RazorScan</a>
-        <a class="nav-item nav-link" target="_blank" href="https://github.com/razor-network/synthetic-assets">
+        <a class="nav-item nav-link text-decoration-none font-weight-bold " target="_blank" href="https://razor.network">Razor Network</a>
+        <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://razorscan.io">RazorScan</a>
+        <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://github.com/razor-network/synthetic-assets">
           <font-awesome-icon :icon="['fab', 'github']" /> Code</a>
-        <a class="nav-item nav-link" target="_blank" href="https://t.me/razornetwork">
+        <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://t.me/razornetwork">
           <font-awesome-icon :icon="['fab', 'telegram-plane']" /> Help</a>
 
 
