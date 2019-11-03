@@ -1,0 +1,42 @@
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  [redirects.headers]
+    Pragma = "no-cache"
+    Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+
+[[headers]]
+  for = "/service-worker.js"
+  [headers.values]
+    Pragma = "no-cache"
+    Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public,max-age=31536000,immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public,max-age=31536000,immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public,max-age=31536000,immutable"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public,max-age=31536000,immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "deny"
+    X-Download-Options = "noopen"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
