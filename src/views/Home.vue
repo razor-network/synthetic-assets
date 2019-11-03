@@ -2,7 +2,7 @@
 <div>
 
     <div class="row row-space-12">
-      <div class="col-xl-6 col-lg-6 mb-4">
+      <div class="col-md-6">
         <!-- <div class="row"> -->
         <h3> Welcome to Razor Synths</h3>
 
@@ -18,10 +18,8 @@
 
       </div>
       <div class="col-md-6">
-        <div class="p-6">
-          <img src="@/assets/img/hello.svg" class="img-fluid">
+          <img src="@/assets/img/hello.svg" class="img-fluid align-middle">
           <!-- <div class="footer"> (c) 2019 All rights reserved </div> -->
-        </div>
       </div>
       <router-link to="/App" class="btn btn-primary text-decoration-none">
 

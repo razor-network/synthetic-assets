@@ -5,8 +5,8 @@
       <!-- <div class="row"> -->
 
       <h3>Frequently Asked Questions</h3>
-      <h4> What is Razor Synths? </h4>
-      <p>Razor Synths allows you to mint synthetic tokens which can track any asset in the world.</p>
+      <h4> What are Razor Synths? </h4>
+      <p>Razor Synths are synthetic ERC20 tokens which can track any asset in the world.</p>
 
       <h4> Who is this app for? </h4>
       <p>This app is primarily for those who want to open short positions on assets. Those who want to open a long position should buy the tokens from shorters.
