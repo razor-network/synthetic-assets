@@ -8,7 +8,7 @@
   <div v-if="!warning">
     <h3> Step 1: Get some Göeth </h3>
     <p><strong> You will need some Göerli Ether to use the app. </strong></p>
-    <p><a class=" btn btn-primary text-decoration-none" target="_blank" href='https://goerli-faucet.slock.it/'>Get some Göeth here</a> </p>
+    <p><a class=" btn btn-primary text-decoration-none" target="_blank" href='https://goerli-faucet.slock.it/'>Get some Göeth here</a> or <a class=" btn btn-primary text-decoration-none" target="_blank" href='https://faucet.goerli.mudit.blog/'>Here</a> </p>
     <h3>Step 2: Select an Asset</h3>
     <p> Please select an asset below or add your own datafeed here: <a class="font-weight-bold" target="_blank" href='https://razorscan.io/#/query'>RazorScan</a> </p>
 
@@ -120,13 +120,13 @@
     </div>
 
     <div v-if="valueOnChainInEthString && !ratioString">
-      <h3>Step 3: Create CDP and mint tokens </h3>
+      <h3>Step 3: Create a CDP and mint tokens </h3>
       <div class="row  d-flex p-4 flex-row align-items-stretch">
 
         <div class="col-md-12 card">
           <div class="card-body">
             <h4 class="mb-4">Mint</h4>
-            <p>Collateralize with Ether to mint the tokens. Tokens will be minted with 500% collateral ratio by default.</p>
+            <p>Create a Collateralized Debt Position with ether and mint synthetic tokens. Tokens will be minted with 500% collateral ratio by default.</p>
             <div class="mb-4">
               <label>ETH</label>
               <input class="form-control" v-model="eth" type="number" step="0.000001" min="0.000001">
@@ -195,10 +195,10 @@
       </div> -->
 
         <div class="btn-group btn-group-lg d-flex" role="group" aria-label="Actions ">
-          <button type="button" class="btn btn-success" @click="action=1">Add collateral</button>
-          <button type="button" class="btn btn-primary border border-dark" @click="action=2">Draw tokens</button>
-          <button type="button" class="btn btn-primary border border-dark" @click="action=3">Transfer tokens</button>
-          <button type="button" class="btn btn-danger" @click="action=4">Close CDP </button>
+          <button type="button" class="btn btn-success" @click="action=1" :class="{active:action===1}">Add collateral</button>
+          <button type="button" class="btn btn-primary border border-dark" @click="action=2" :class="{active:action===2}">Draw tokens</button>
+          <button type="button" class="btn btn-primary border border-dark" @click="action=3" :class="{active:action===3}">Transfer tokens</button>
+          <button type="button" class="btn btn-danger" @click="action=4" :class="{active:action===4}">Close CDP </button>
         </div>
       </div>
     </div>
