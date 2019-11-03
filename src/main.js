@@ -9,7 +9,7 @@ import VueAxios from 'vue-axios'
 import Plugin from './plugins/Plugin'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faInfoCircle, faSync } from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle, faSync, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faTelegramPlane, faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueElementLoading from 'vue-element-loading'
@@ -28,6 +28,7 @@ library.add(faInfoCircle)
 library.add(faTelegramPlane)
 library.add(faGithub)
 library.add(faSync)
+library.add(faSearch)
 
 Vue.component('VueElementLoading', VueElementLoading)
 Vue.component('font-awesome-icon', FontAwesomeIcon)

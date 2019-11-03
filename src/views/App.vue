@@ -22,17 +22,25 @@
     <br />
     <!-- </div> -->
 
-    <div class="row p-2 mb-30">
-      <div class="col-md-2"><button class='btn btn-secondary' v-if="assetId && !showInfo" @model="showInfo" @click="showInfo = !showInfo">
+    <div class="row p-2 mb-30 d-flex">
+        <div class="p-2">
+      <button class='btn btn-secondary ml-50' v-if="assetId && !showInfo" @model="showInfo" @click="showInfo = !showInfo">
           <font-awesome-icon icon="info-circle" /> Show Details </button>
+
         <button class='btn btn-secondary' v-if="assetId && showInfo" @model="showInfo" @click="showInfo = !showInfo">
           <font-awesome-icon icon="info-circle" /> Hide Details </button>
       </div>
-      <div class="col-md-2">
+      <div class="p-2">
+
+        <a class='btn btn-secondary text-decoration-none' v-if="assetId" :href="'https://razorscan.io/#/custom/'+selected.id" target="_blank">
+          <font-awesome-icon icon="search" /> Explore datafeed on RazorScan </a>
+</div>
+<div class="p-2">
+
         <button class='btn btn-secondary' v-if="assetId" @click="refresh">
           <font-awesome-icon icon="sync" /> Refresh </button>
-      </div>
     </div>
+</div>
     <!-- <div class="col-md-4" v-if="selected"> -->
     <!-- <div> -->
     <!-- <label>Actions</label> -->
