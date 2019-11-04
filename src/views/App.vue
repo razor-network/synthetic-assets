@@ -157,7 +157,7 @@
             <p class="display-5 strong">Collateral</p>
             <h4 class="display-4">
               {{collateralString.first}}<small class="text-muted">{{collateralString.second}} </small> </h4>
-            <h4 class="display-5 text-muted">ETH </h4>
+            <h4 class="display-5 text-muted">Ether</h4>
             <h4><small class="display-5 text-muted" v-if="ratioString">Collateral ratio: {{ratioString}}%</small></small></h4>
           </div>
         </div>
@@ -167,7 +167,7 @@
           <div class="card-body">
             <p class="display-5">Debt</p>
             <h4 class="display-4">{{debtString.first}}<small class="text-muted">{{debtString.second}} </small></h4>
-            <h4> <small class="display-5 text-muted" v-if="ratioString">{{selected.name}}</small></h4>
+            <h4> <small class="display-5 text-muted" v-if="ratioString">Synthetic {{selected.name}}</small></h4>
             <h4> <small class="invisible">.</small></h4>
           </div>
         </div>
@@ -179,14 +179,14 @@
           <div class="card-body">
             <p class="card-title">Your Balance</p>
             <h4 class="display-3">{{userErc20BalanceString.first}}<small class="text-muted">{{userErc20BalanceString.second}}</small></h4>
-            <p class="card-subtitle text-muted display-4">{{selected.name}}</p>
+            <p class="card-subtitle text-muted display-4">Synthetic {{selected.name}}</p>
           </div>
         </div>
       </div>
     </div>
     <div class="row p-2" v-if="ratioString">
       <div class="col-md-12">
-        <h3>More Actions</h3>
+        <h3>Actions</h3>
         <!-- <div class="nav nav-tabs nav-justified">
           <li class="nav-item">
               <button class="nav-link active" >Add collateral</button>
@@ -423,16 +423,16 @@ export default {
     CRafterDraw: function() {
       if (!this.ratio) return
       if (isNaN(this.ratio)) return
-      if (this.drawAmount == 0) return
+      if (this.drawAmount === 0 || this.drawAmount === null ) return
       const x = (new BN(this.debt).plus(new BN(this.drawAmount))).multipliedBy(this.valueOnChainInEth).dividedBy(new BN(this.collateral))
       return ((100 / x))
       // return Math.round((100 / x),2)
     }
   },
   watch: {
-    assetId: async function(newValue) {
-      this.refresh()
-    }
+    // assetId: async function(newValue) {
+    //   this.refresh()
+    // }
   },
   async mounted() {
     await enableEth()
@@ -455,6 +455,7 @@ export default {
     getJobs: async function() {
       let data = await this.axios.get('https://api.razor.network/' + 'jobs')
       // let data = await this.axios.get('http://localhost:3000/' + 'jobs')
+      this.jobs=[]
       for (let i = 1; i < data.data.message.length; i++) {
         this.jobs.push({
           'url': data.data.message[i].url,
@@ -487,6 +488,12 @@ export default {
     // },
     refresh: async function() {
       this.show = true
+      this.eth = null
+      this.addEth = null
+      this.drawAmount = null
+      this.transferAmount = null
+      this.transferAddress = null
+      await this.getJobs()
       this.assetId = await getAssetId(this.selected.id)
       console.log('this.assetId', this.assetId)
       await this.updateCdpInfo()
