@@ -18,6 +18,7 @@ import VueAnalytics from 'vue-analytics'
 Vue.config.productionTip = false
 
 Vue.use(VueAnalytics, {
+  router,
   id: 'UA-143423314-3'
 })
 
