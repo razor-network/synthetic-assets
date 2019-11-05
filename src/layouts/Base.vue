@@ -14,9 +14,9 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <!-- <a class="nav-item nav-link active" href="#">Home </a> -->
-        <router-link to="/App" class="nav-item nav-link text-decoration-none font-weight-bold">
+        <!-- <router-link to="/App" class="nav-item nav-link text-decoration-none font-weight-bold">
           <span>App</span>
-        </router-link>
+        </router-link> -->
         <router-link to="/FAQ" class="nav-item nav-link text-decoration-none font-weight-bold ">
           <span>FAQ</span>
         </router-link>
@@ -26,6 +26,8 @@
           <font-awesome-icon :icon="['fab', 'github']" /> Source</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://t.me/razornetwork">
           <font-awesome-icon :icon="['fab', 'telegram-plane']" /> Help</a>
+        <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://twitter.com/razor_network">
+          <font-awesome-icon :icon="['fab', 'twitter']" /> Twitter</a>
 
 
       </div>

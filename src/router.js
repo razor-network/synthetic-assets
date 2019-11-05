@@ -16,9 +16,9 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'home',
-          component: () => import('./views/Home'),
-          meta: { title: 'Home' }
+          name: 'app',
+          component: () => import('./views/App'),
+          meta: { title: 'App' }
         }
       ]
   },
@@ -33,18 +33,18 @@ export default new Router({
         meta: { title: 'FAQ' }
       }
     ]
-},
-  {
-    path: '/App',
-    component: Base,
-    children: [
-      {
-        path: '',
-        name: 'app',
-        component: () => import('./views/App'),
-        meta: { title: 'App' }
-      }
-    ]
-  }
+}
+  // {
+  //   path: '/App',
+  //   component: Base,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'app',
+  //       component: () => import('./views/App'),
+  //       meta: { title: 'App' }
+  //     }
+  //   ]
+  // }
   ]
 })
