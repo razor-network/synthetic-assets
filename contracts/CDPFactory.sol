@@ -53,7 +53,7 @@ contract CDPFactory {
         if (toMint == 0) revert("toMint is 0");
         // emit Debug(toMint);
         if (contracts[id] == 0x0000000000000000000000000000000000000000) {
-            SimpleToken _st = new SimpleToken(string(abi.encodePacked("Razor Synthetic ", name)), name, 18);
+            SimpleToken _st = new SimpleToken(string(abi.encodePacked("DeltaOne Synthetic ", name)), name, 18);
             address ad = address(_st);
             contracts[id] = ad;
         }

@@ -22,7 +22,7 @@ let CDPFactory
 export const enableEth = async () => {
   if (typeof window.ethereum === 'undefined'
     || typeof window.web3 === 'undefined') {
-    alert('Browser does not support ethereum. Consider installing metamask!')
+    // alert('Browser does not support ethereum. Consider installing metamask!')
     return false
   } else {
     // In the case the user has MetaMask installed, you can easily
@@ -34,6 +34,8 @@ export const enableEth = async () => {
     Oracle = new web3.eth.Contract(JobManagerBuild.abi, DelegatorBuild.networks[networkId].address)
     CDPFactory = new web3.eth.Contract(CDPFactoryBuild.abi, CDPFactoryBuild.networks[networkId].address)
 
+    let id = await web3.eth.net.getId()
+    if (id !== 5) return false
     return true
   }
 }

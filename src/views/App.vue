@@ -1,9 +1,9 @@
 <template>
 <div>
-    <p class='font-weight-light'>Note: This is an application built on Görli testnet for demonstration purpose only. Do not use assets with real value. Assets minted may not have any value.</p>
+    <p class='font-weight-light'>Note: This is an application built on Görli testnet for demonstration purpose only. Do not use assets with real value. Assets minted may not have any value. Use at your own risk.</p>
   <vue-element-loading :active="show" spinner="bar-fade-scale" is-full-screen color="#171aa5" size="128" />
   <div class="alert alert-danger" v-if="warning" role="alert">
-    Please select Göerli testnet in metamask to continue.
+    Please use an ethereum compatible browser and select Göerli testnet to continue.
   </div>
 
   <div v-if="!warning">
@@ -436,8 +436,8 @@ export default {
     // }
   },
   async mounted() {
-    await enableEth()
-    this.warning = await getNetwork()
+    this.warning = !(await enableEth())
+    // this.warning = await getNetwork()
     console.log(this.warning)
     this.getJobs()
   },
