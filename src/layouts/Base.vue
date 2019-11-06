@@ -4,7 +4,8 @@
   <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-our container d-flex ">
     <div class="brand flex-grow-1 navbar-brand  ">
       <router-link to="/">
-        <img src="@/assets/img/logo.svg" height="26px" class="d-inline-block align-top" /><span class="text-monospace" style="vertical-align: middle; ">Synths</span>
+        <img src="@/assets/img/logo4.svg" height="26px" class="d-inline-block align-top" />
+        <!-- <span class="text-monospace" style="vertical-align: middle; ">Synths</span> -->
       </router-link>
     </div>
 
@@ -17,17 +18,18 @@
         <!-- <router-link to="/App" class="nav-item nav-link text-decoration-none font-weight-bold">
           <span>App</span>
         </router-link> -->
-        <router-link to="/FAQ" class="nav-item nav-link text-decoration-none font-weight-bold ">
+        <!-- <router-link to="/FAQ" class="nav-item nav-link text-decoration-none font-weight-bold ">
           <span>FAQ</span>
-        </router-link>
-        <a class="nav-item nav-link text-decoration-none font-weight-bold " target="_blank" href="https://razor.network">Razor Network</a>
+        </router-link> -->
+        <a class="nav-item nav-link text-decoration-none font-weight-bold " href="https://deltaone.finance">Back to the Homepage</a>
+        <!-- <a class="nav-item nav-link text-decoration-none font-weight-bold " target="_blank" href="https://razor.network">Razor Network</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://razorscan.io">RazorScan</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://github.com/razor-network/synthetic-assets">
           <font-awesome-icon :icon="['fab', 'github']" /> Source</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://t.me/razornetwork">
           <font-awesome-icon :icon="['fab', 'telegram-plane']" /> Help</a>
         <a class="nav-item nav-link text-decoration-none font-weight-bold" target="_blank" href="https://twitter.com/razor_network">
-          <font-awesome-icon :icon="['fab', 'twitter']" /> Twitter</a>
+          <font-awesome-icon :icon="['fab', 'twitter']" /> Twitter</a> -->
 
 
       </div>
