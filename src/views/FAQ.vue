@@ -19,8 +19,6 @@
       <p>The data is fetched using <a target="_blank" href="https://razor.network"> Razor Network</a>, a decentralized oracle network.
       </p>
 
-
-
       <h4> How to open a short position?</h4>
       <p> Creating a CDP using this app backed by Ether will mint the synthetic tokens. You can sell those ERC20 tokens to anyone to open a "short" position. In the "Mint" form, enter the amount of ether you want to collateralize with and click
         "Mint". A new CDP will be opened with 500% Collateral ratio. </p>
@@ -38,8 +36,6 @@
       <h4> Can I add a new asset?  </h4>
       <p>You can add an asset in Razor network from <a class="font-weight-bold" target="_blank" href='https://razorscan.io/#/query'>RazorScan</a>. You will then be able to mint a synthetic asset based on that datafeed using Razor Synth.
       </p>
-
-
       <!-- <div class="col-md-4 overlay-disabled">
         <div class="card">
           <div class="card-body">

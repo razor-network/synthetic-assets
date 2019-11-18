@@ -20,8 +20,8 @@ let Oracle
 let CDPFactory
 // let warning = false
 export const enableEth = async () => {
-  if (typeof window.ethereum === 'undefined'
-    || typeof window.web3 === 'undefined') {
+  if (typeof window.ethereum === 'undefined' ||
+    typeof window.web3 === 'undefined') {
     // alert('Browser does not support ethereum. Consider installing metamask!')
     return false
   } else {
@@ -53,7 +53,7 @@ export const EventBus = new Vue()
 // }
 // }
 
-export const getNetwork = async() => {
+export const getNetwork = async () => {
   let id = await web3.eth.net.getId()
   if (id !== 5) return true
   return false
@@ -89,9 +89,9 @@ export const cdps = async (assetId) => {
 }
 
 export const getAssetId = async (jobId) => {
-  console.log('jobId', jobId)
+  // console.log('jobId', jobId)
   let res = await Oracle.methods.getJob(jobId).call()
-  console.log('res', res)
+  // console.log('res', res)
   let assetId = web3.utils.soliditySha3(res.url, res.selector)
   return assetId
 }
@@ -108,7 +108,7 @@ export const balanceOf = async (erc20Address) => {
 export const mint = async (jobId, value) => {
   value = new BigNumber(value).times(_1e18)
   value = value.toFixed()
-  console.log('valllllue', value)
+  // console.log('valllllue', value)
   // value = new web3.utils.BN(value)
 
   // value = _1e18.mul(value)
@@ -116,7 +116,7 @@ export const mint = async (jobId, value) => {
 
   const res = await CDPFactory.methods.mint(jobId).send({
     from: accounts[0],
-  value})
+    value })
 
   return {
     tx: res.transactionHash
@@ -125,7 +125,7 @@ export const mint = async (jobId, value) => {
 export const transfer = async (erc20Address, address, value) => {
   value = new BigNumber(value).times(_1e18)
   value = value.toFixed()
-  console.log('valllllue', value)
+  // console.log('valllllue', value)
   // value = new web3.utils.BN(value)
 
   // value = _1e18.mul(value)
@@ -133,7 +133,7 @@ export const transfer = async (erc20Address, address, value) => {
   const SimpleToken = new web3.eth.Contract(SimpleTokenBuild.abi, erc20Address)
 
   const res = await SimpleToken.methods.transfer(address, value).send({
-  from: accounts[0]})
+    from: accounts[0] })
 
   return {
     tx: res.transactionHash
@@ -142,11 +142,11 @@ export const transfer = async (erc20Address, address, value) => {
 
 export const draw = async (jobId, value) => {
   // amount = String(Number(amount) * 1000000000000000000)
-  console.log('valllllue', value)
+  // console.log('valllllue', value)
   value = new BigNumber(value).times(_1e18)
-  console.log('valllllue', value)
+  // console.log('valllllue', value)
   value = value.toFixed()
-  console.log('valllllue', value)
+  // console.log('valllllue', value)
   // value = new web3.utils.BN(value)
   // console.log('valllllue', value)
   // console.log('amount', amount)
@@ -156,7 +156,7 @@ export const draw = async (jobId, value) => {
   const accounts = await web3.eth.getAccounts()
 
   const res = await CDPFactory.methods.draw(jobId, value).send({
-  from: accounts[0]})
+    from: accounts[0] })
 
   return {
     tx: res.transactionHash
@@ -166,7 +166,7 @@ export const draw = async (jobId, value) => {
 export const collateralize = async (jobId, value) => {
   value = new BigNumber(value).times(_1e18)
   value = value.toFixed()
-  console.log('valllllue', value)
+  // console.log('valllllue', value)
   value = new web3.utils.BN(value)
 
   // value = _1e18.mul(value)
@@ -174,7 +174,7 @@ export const collateralize = async (jobId, value) => {
 
   const res = await CDPFactory.methods.increaseCollateral(jobId).send({
     from: accounts[0],
-  value})
+    value })
 
   return {
     tx: res.transactionHash
@@ -183,9 +183,9 @@ export const collateralize = async (jobId, value) => {
 export const burn = async (jobId, erc20Address) => {
   // let tokens = await balanceOf
   const accounts = await web3.eth.getAccounts()
-  console.log('current account', accounts[0])
+  // console.log('current account', accounts[0])
   let tokens = await balanceOf(erc20Address)
-  console.log('burning', tokens)
+  // console.log('burning', tokens)
   tokens = tokens.toString()
 
   const SimpleToken = new web3.eth.Contract(SimpleTokenBuild.abi, erc20Address)
