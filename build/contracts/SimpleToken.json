@@ -1338,7 +1338,7 @@
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-04T16:05:41.021Z",
+  "updatedAt": "2019-12-01T08:37:51.827Z",
   "devdoc": {
     "details": "Very simple ERC20 Token example, where all tokens are pre-assigned to the creator. Note they can later distribute these tokens as they wish using `transfer` and other `ERC20` functions.",
     "methods": {
