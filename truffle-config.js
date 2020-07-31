@@ -27,7 +27,7 @@
 const HDWalletProvider = require('truffle-hdwallet-provider')
 //
 const fs = require('fs')
-// const infuraKey = fs.readFileSync('.infura').toString().trim()
+const infura = fs.readFileSync('.infura').toString().trim()
 const mnemonic = fs.readFileSync('.mnemonic').toString().trim()
 
 module.exports = {
@@ -55,8 +55,8 @@ module.exports = {
     },
 
     rinkeby: {
-      provider: function () {
-        return new HDWalletProvider(mnemonic, 'https://rinkeby.infura.io/v3/26056f03e83343f5bbd280bafaa52684')
+      provider: function() {
+        return new HDWalletProvider(mnemonic, 'https://rinkeby.infura.io/v3/' + infura)
       },
       // provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/`), // `${infuraKey}`),
       network_id: 4,
@@ -67,8 +67,8 @@ module.exports = {
       skipDryRun: true // Skip dry run before migrations? (default: false for public nets )
     },
     goerli: {
-      provider: function () {
-        return new HDWalletProvider(mnemonic, 'https://goerli.infura.io/v3/26056f03e83343f5bbd280bafaa52684')
+      provider: function() {
+        return new HDWalletProvider(mnemonic, 'https://goerli.infura.io/v3/' + infura)
       },
       // provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/`), // `${infuraKey}`),
       network_id: 5,
@@ -100,12 +100,12 @@ module.exports = {
     // skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
 
-  // Useful for private networks
-  // private: {
-  // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
-  // network_id: 2111,   // This network is yours, in the cloud.
-  // production: true    // Treats this network as if it was a public net. (default: false)
-  // }
+    // Useful for private networks
+    // private: {
+    // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
+    // network_id: 2111,   // This network is yours, in the cloud.
+    // production: true    // Treats this network as if it was a public net. (default: false)
+    // }
   },
 
   // Set default mocha options here, use special reporters etc.
@@ -117,14 +117,14 @@ module.exports = {
   compilers: {
     solc: {
       version: '0.5.10', // Fetch exact version from solc-bin (default: truffle's version)
-    // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
-    // settings: {          // See the solidity docs for advice about optimization and evmVersion
-    //  optimizer: {
-    //    enabled: false,
-    //    runs: 200
-    //  },
-    //  evmVersion: "byzantium"
-    // }
+      // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
+      // settings: {          // See the solidity docs for advice about optimization and evmVersion
+      //  optimizer: {
+      //    enabled: false,
+      //    runs: 200
+      //  },
+      //  evmVersion: "byzantium"
+      // }
     }
   }
 }
