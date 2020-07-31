@@ -18774,8 +18774,7 @@
             }
           ],
           "name": "DebugUint256",
-          "type": "event",
-          "signature": "0x43d4b4706539f9e22baf8767ebea21ad24f723f14b6981664ac4d0af596dddbe"
+          "type": "event"
         },
         "0x110cb96fe6c668b63c7e7dabd2d19d22d1965292a36646de1584ccf2d1d93419": {
           "anonymous": false,
@@ -18787,8 +18786,7 @@
             }
           ],
           "name": "DebugBytes32",
-          "type": "event",
-          "signature": "0x110cb96fe6c668b63c7e7dabd2d19d22d1965292a36646de1584ccf2d1d93419"
+          "type": "event"
         }
       },
       "links": {},
@@ -18807,8 +18805,7 @@
             }
           ],
           "name": "DebugUint256",
-          "type": "event",
-          "signature": "0x43d4b4706539f9e22baf8767ebea21ad24f723f14b6981664ac4d0af596dddbe"
+          "type": "event"
         },
         "0x110cb96fe6c668b63c7e7dabd2d19d22d1965292a36646de1584ccf2d1d93419": {
           "anonymous": false,
@@ -18820,17 +18817,17 @@
             }
           ],
           "name": "DebugBytes32",
-          "type": "event",
-          "signature": "0x110cb96fe6c668b63c7e7dabd2d19d22d1965292a36646de1584ccf2d1d93419"
+          "type": "event"
         }
       },
       "links": {},
-      "address": "0x086B1B66799D1E8c6C25176Cda4478AA0c847223",
-      "transactionHash": "0xe20e27e5216c738f0d4076924f5f10dded31e347b8f91ec675a61ae91212d673"
+      "address": "0xAda6E2f0f4fB7ed5EC07075d0885cba44B79cc1C",
+      "transactionHash": "0x9105ec648ffe39afffa3acd36fc1db3056f7d6a87e1351cd9e7c6cad98030f6b"
     }
   },
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2019-12-01T08:39:24.691Z",
+  "schemaVersion": "3.2.3",
+  "updatedAt": "2020-07-31T18:27:03.521Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

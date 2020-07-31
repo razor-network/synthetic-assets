@@ -8,5 +8,5 @@ module.exports = async function (deployer) {
   await deployer.deploy(CDPFactory)
   let cdp = await CDPFactory.deployed()
   // delegator address
-  await cdp.init('0x058EF5a3d450A2fac5d24dDc75d516A136AE3f62')
+  await cdp.init('0xc81e2c1836D0aaA279334C00175A4261EB18D27F')
 }
